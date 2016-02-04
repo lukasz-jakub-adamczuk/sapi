@@ -28,9 +28,9 @@ class DefaultController extends Controller
 
         // print_r($repository);
 
-        $cats = $repository->findAll();
+        $categories = $repository->findAll();
 
-        print_r($cats);
+        // print_r($cats);
 
         // $advertiserWithId123 = $repository->find('123');
 
@@ -38,10 +38,18 @@ class DefaultController extends Controller
 
         // $entityManager->persist($advertiserWithId123);
         // $entityManager->flush();
+        return $this->render(
+            // 'article/recent_list.html.twig',
+            'default/index.html.twig',
+            [
+                'categories' => $categories,
+                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+            ]
+        );
 
         // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-        ]);
+        // return $this->render('default/index.html.twig', [
+        //     'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        // ]);
     }
 }

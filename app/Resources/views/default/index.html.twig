@@ -44,6 +44,14 @@
 
         </div>
     </div>
+    <h2>Categories</h2>
+    {% for category in categories %}
+        <p>
+        <a href="/category/{{ category.getSlug() }}">
+            {{ category.getName() }}
+        </a>
+        </p>
+    {% endfor %}
 {% endblock %}
 
 {% block stylesheets %}
