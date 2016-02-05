@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\ArticleCreator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,29 +16,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $articleCreator = $this->container->get('articleCreator');
 
-        // $article = new Advertiser();
-        // $advertiser->setName('Test');
-        // $advertiser->setInstagramusername('XYZ');
-
-        // $entityManager->persist($advertiser);
-        // $entityManager->flush();
+        $articleCreator->create([
+            // ###
+        ]);
 
         $repository = $entityManager->getRepository(ArticleCategory::class);
 
-        // print_r($repository);
-
         $categories = $repository->findAll();
 
-        // print_r($cats);
-
-        // $advertiserWithId123 = $repository->find('123');
-
-        // $advertiserWithId123->setName('Test123456');
-
-        // $entityManager->persist($advertiserWithId123);
-        // $entityManager->flush();
         return $this->render(
             // 'article/recent_list.html.twig',
             'default/index.html.twig',
@@ -46,10 +34,21 @@ class DefaultController extends Controller
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             ]
         );
-
-        // replace this example code with whatever you need
-        // return $this->render('default/index.html.twig', [
-        //     'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-        // ]);
     }
+
+    /**
+     * @Route("/article-list", name="article_list")
+     */
+    public function listAction(Request $request)
+    {
+        $articleList = $this->get('articleProvider')->get();
+
+        return $this->render(); // ....
+    }
+
+    /*
+     * - zainstalowac phpspeca
+     * - przeniesc serwisy do jednego typu zasobu (newsy albo artykuly)
+     * - napisac definicje serwisow w polku app/config/services.yml
+     */
 }
