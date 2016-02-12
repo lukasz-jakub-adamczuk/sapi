@@ -44,7 +44,10 @@
 
         </div>
     </div>
-    <h2>Categories</h2>
+    <h2>News</h2>
+    
+
+    <h2>Artcile Categories</h2>
     {% for category in categories %}
         <p>
         <a href="/category/{{ category.getSlug() }}">
@@ -52,6 +55,7 @@
         </a>
         </p>
     {% endfor %}
+    
 {% endblock %}
 
 {% block stylesheets %}

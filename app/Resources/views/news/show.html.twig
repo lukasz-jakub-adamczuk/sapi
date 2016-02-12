@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="../news">Back to list</a>
+
+    <h2>News</h2>
+    <h3>{{ news.getTitle() }}</h3>
+    <p>{{ news.getMarkup() }}</p>
+{% endblock %}
