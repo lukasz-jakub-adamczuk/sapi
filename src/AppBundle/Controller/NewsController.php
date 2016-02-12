@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Entity\News;
 use AppBundle\Entity\ArticleCategory;
@@ -15,6 +17,7 @@ class NewsController extends Controller
 {
     /**
      * @Route("/news", name="news-index")
+     * @Method("GET")
      */
     public function indexAction(Request $request)
     {
@@ -43,6 +46,7 @@ class NewsController extends Controller
 
     /**
      * @Route("/news/{id}", name="news-show")
+     * @Method("GET")
      */
     public function showAction($id)
     {
@@ -67,19 +71,103 @@ class NewsController extends Controller
 
     /**
      * @Route("/news", name="news-create")
+     * @Method("POST")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $news = $this->getDoctrine()
-            ->getRepository('AppBundle:News')
-            ->find($id);
+        $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        return $this->render(
-            'news/show.html.twig',
-            [
-                'news' => $news,
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            ]
+        $fields = $request->request->all();
+
+        $news = new News();
+
+        $news->setTitle($fields['title']);
+        $news->setSlug($fields['slug']);
+        $news->setIdAuthor(140);
+
+        $entityManager->persist($news);
+        $entityManager->flush();
+
+        // print_r($result);
+
+
+        $news = [
+            'title' => $fields['title']
+        ];
+        // $this->getDoctrine()
+        //     ->getRepository('AppBundle:News')
+        //     ->find($id);
+        // $repository = $entityManager->getRepository(News::class);
+
+        // $result = $repository->find();
+
+        // create a JSON-response with a 200 status code
+        $response = new Response(json_encode($news));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
+     * @Route("/news/{id}")
+     * @Method("PUT")
+     */
+    public function editAction($id, Request $request)
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $fields = $request->request->all();
+
+        $repository = $entityManager->getRepository(News::class);
+        $news = $repository->find($id);
+
+        $news->setTitle($fields['title']);
+        $news->setSlug($fields['slug']);
+        $news->setMarkup($fields['markup']);
+        $news->setMarkdown($fields['markdown']);
+
+        $entityManager->persist($news);
+        $entityManager->flush();
+
+        $news = [
+            'title' => $fields['title']
+        ];
+        
+        // create a JSON-response with a 200 status code
+        $response = new Response(json_encode($news));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
+     * @Route("/news/{id}")
+     * @Method("DELETE")
+     */
+    public function deleteAction($id)
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $repository = $entityManager->getRepository(News::class);
+        $news = $repository->find($id);
+
+        if (!$news) {
+            throw $this->createNotFoundException('No news found');
+        }
+
+        $entityManager->remove($news);
+        $entityManager->flush();
+        
+        // create a JSON-response with a 200 status code
+        // $response = new Response(json_encode($news));
+        // $response->headers->set('Content-Type', 'application/json');
+
+        // return $response;
+
+        return new Response(
+            json_encode(null),
+            204,
+            ['Content-Type' => 'application/json']
         );
     }
 }
