@@ -3,9 +3,13 @@ renaissance_homepage:
     defaults: { _controller: RenaissanceBundle:Default:index }
 
 _index:
-    path:     /article
+    path:     /artykuly
     defaults: { _controller: RenaissanceBundle:Article:Index }
 
+_category:
+    path:     /artykuly/{category}
+    defaults: { _controller: RenaissanceBundle:Article:Category }
+
 _show:
-    path:     /article/{slug}
+    path:     /artykuly/{category}/{slug}
     defaults: { _controller: RenaissanceBundle:Article:Show }

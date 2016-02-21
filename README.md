@@ -1,3 +1,14 @@
+# Setup
+
+  php bin/console doctrine:mapping:import --force AppBundle
+
+  php bin/console doctrine:generate:entities AppBundle
+
+  php bin/console generate:bundle AppBundle:Article
+
+  php bin/console generate:controller ...
+
+
 Symfony Standard Edition
 ========================
 
@@ -57,12 +68,6 @@ All libraries and bundles included in the Symfony Standard Edition are
 released under the MIT or BSD license.
 
 Enjoy!
-
-# Setup
-
-  php bin/console doctrine:mapping:import --force AppBundle
-
-  php bin/console doctrine:generate:entities AppBundle
 
   
 
