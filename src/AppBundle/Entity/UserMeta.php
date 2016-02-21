@@ -110,4 +110,3 @@ class UserMeta
         return $this->idUserMeta;
     }
 }
-

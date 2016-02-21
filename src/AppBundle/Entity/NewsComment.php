@@ -168,4 +168,3 @@ class NewsComment
         return $this->idNewsComment;
     }
 }
-

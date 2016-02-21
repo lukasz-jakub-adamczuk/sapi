@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Article
  */
@@ -96,6 +98,12 @@ class Article
      * @var integer
      */
     private $idArticle;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ArticleCategory", inversedBy="articles")
+     * @ORM\JoinColumn(name="id_article_category", referencedColumnName="id_article_category")
+     */
+    protected $category;
 
 
     /**
@@ -516,4 +524,3 @@ class Article
         return $this->idArticle;
     }
 }
-

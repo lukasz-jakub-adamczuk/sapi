@@ -81,4 +81,3 @@ class UserPermission
         return $this->idUserPermission;
     }
 }
-

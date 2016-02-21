@@ -255,4 +255,3 @@ class GalleryImage
         return $this->idGalleryImage;
     }
 }
-

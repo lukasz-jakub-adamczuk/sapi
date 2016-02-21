@@ -197,4 +197,3 @@ class Gallery
         return $this->idGallery;
     }
 }
-

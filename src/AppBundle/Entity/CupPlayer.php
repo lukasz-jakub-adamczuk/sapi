@@ -284,4 +284,3 @@ class CupPlayer
         return $this->idCupPlayer;
     }
 }
-

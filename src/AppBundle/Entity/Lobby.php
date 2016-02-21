@@ -255,4 +255,3 @@ class Lobby
         return $this->idLobby;
     }
 }
-

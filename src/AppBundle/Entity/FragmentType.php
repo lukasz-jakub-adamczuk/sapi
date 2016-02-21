@@ -52,4 +52,3 @@ class FragmentType
         return $this->idFragmentType;
     }
 }
-

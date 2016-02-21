@@ -110,4 +110,3 @@ class PermissionGroup
         return $this->idPermissionGroup;
     }
 }
-

@@ -168,4 +168,3 @@ class ArticleComment
         return $this->idArticleComment;
     }
 }
-

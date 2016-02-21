@@ -545,4 +545,3 @@ class Story
         return $this->idStory;
     }
 }
-

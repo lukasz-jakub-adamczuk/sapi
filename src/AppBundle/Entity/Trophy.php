@@ -342,4 +342,3 @@ class Trophy
         return $this->idTrophy;
     }
 }
-

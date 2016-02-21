@@ -168,4 +168,3 @@ class GalleryComment
         return $this->idGalleryComment;
     }
 }
-

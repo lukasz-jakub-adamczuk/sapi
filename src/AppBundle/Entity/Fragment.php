@@ -197,4 +197,3 @@ class Fragment
         return $this->idFragment;
     }
 }
-

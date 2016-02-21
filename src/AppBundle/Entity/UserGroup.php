@@ -110,4 +110,3 @@ class UserGroup
         return $this->idUserGroup;
     }
 }
-

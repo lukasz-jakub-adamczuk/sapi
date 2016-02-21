@@ -255,4 +255,3 @@ class ArticleVerdict
         return $this->idArticleVerdict;
     }
 }
-

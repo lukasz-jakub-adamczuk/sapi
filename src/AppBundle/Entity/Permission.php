@@ -168,4 +168,3 @@ class Permission
         return $this->idPermission;
     }
 }
-

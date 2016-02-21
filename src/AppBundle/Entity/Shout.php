@@ -168,4 +168,3 @@ class Shout
         return $this->idShout;
     }
 }
-

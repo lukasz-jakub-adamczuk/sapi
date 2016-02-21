@@ -197,4 +197,3 @@ class ArticleTemplate
         return $this->idArticleTemplate;
     }
 }
-

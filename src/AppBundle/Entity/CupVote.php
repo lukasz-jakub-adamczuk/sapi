@@ -81,4 +81,3 @@ class CupVote
         return $this->idCupVote;
     }
 }
-

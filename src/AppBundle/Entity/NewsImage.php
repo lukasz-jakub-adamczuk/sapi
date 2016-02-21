@@ -110,4 +110,3 @@ class NewsImage
         return $this->idNewsImage;
     }
 }
-

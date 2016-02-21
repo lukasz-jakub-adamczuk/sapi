@@ -371,4 +371,3 @@ class User
         return $this->idUser;
     }
 }
-

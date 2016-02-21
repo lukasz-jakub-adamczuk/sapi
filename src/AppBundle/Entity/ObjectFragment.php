@@ -110,4 +110,3 @@ class ObjectFragment
         return $this->idObjectFragment;
     }
 }
-

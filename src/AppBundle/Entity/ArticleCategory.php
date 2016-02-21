@@ -2,6 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * ArticleCategory
  */
@@ -57,6 +60,15 @@ class ArticleCategory
      */
     private $idArticleCategory;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="id_article_category")
+     */
+    protected $articles;
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
 
     /**
      * Set name
@@ -284,4 +296,3 @@ class ArticleCategory
         return $this->idArticleCategory;
     }
 }
-

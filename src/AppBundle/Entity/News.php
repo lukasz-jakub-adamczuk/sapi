@@ -400,4 +400,3 @@ class News
         return $this->idNews;
     }
 }
-

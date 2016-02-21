@@ -168,4 +168,3 @@ class CupBattle
         return $this->idCupBattle;
     }
 }
-

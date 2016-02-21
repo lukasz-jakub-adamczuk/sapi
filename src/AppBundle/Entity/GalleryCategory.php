@@ -81,4 +81,3 @@ class GalleryCategory
         return $this->idGalleryCategory;
     }
 }
-

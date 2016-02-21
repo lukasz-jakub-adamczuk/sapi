@@ -110,4 +110,3 @@ class Cup
         return $this->idCup;
     }
 }
-

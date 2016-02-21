@@ -255,4 +255,3 @@ class StoryCategory
         return $this->idStoryCategory;
     }
 }
-

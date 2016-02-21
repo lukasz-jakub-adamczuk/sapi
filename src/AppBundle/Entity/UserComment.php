@@ -168,4 +168,3 @@ class UserComment
         return $this->idUserComment;
     }
 }
-

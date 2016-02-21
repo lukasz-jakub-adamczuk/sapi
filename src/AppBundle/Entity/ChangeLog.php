@@ -197,4 +197,3 @@ class ChangeLog
         return $this->idChangeLog;
     }
 }
-
