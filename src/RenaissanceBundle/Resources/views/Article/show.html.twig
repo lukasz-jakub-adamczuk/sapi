@@ -4,4 +4,15 @@
 
 {% block body %}
 <h1>Welcome to the Article:Show page</h1>
+
+<a href="{{ path('_category', {'category': 'chrono-cross'}) }}">back to list</a>
+
+<h1>Artykuł</h1>
+
+<h2>{{ article.title }}</h2>
+
+<div>
+	{{ article.markup|raw }}
+</div>
+
 {% endblock %}
