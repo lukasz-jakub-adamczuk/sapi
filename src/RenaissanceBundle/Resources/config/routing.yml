@@ -1,0 +1,3 @@
+renaissance_homepage:
+    path:     /
+    defaults: { _controller: RenaissanceBundle:Default:index }
