@@ -1,3 +1,11 @@
 renaissance_homepage:
     path:     /
     defaults: { _controller: RenaissanceBundle:Default:index }
+
+_index:
+    path:     /article
+    defaults: { _controller: RenaissanceBundle:Article:Index }
+
+_show:
+    path:     /article/{slug}
+    defaults: { _controller: RenaissanceBundle:Article:Show }
