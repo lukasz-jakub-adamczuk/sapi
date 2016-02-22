@@ -8,6 +8,40 @@
 
   php bin/console generate:controller ...
 
+# Development
+
+## Vagrant machine
+
+To run Vagrant, type in console:
+```
+vagrant up
+```
+
+then 
+
+```
+vagrant ssh
+```
+
+to play with it.
+
+## XDebug
+
+https://www.dropbox.com/s/t0s43m8htd4vspa/phpuk-step-into-debugging.pdf?dl=0
+http://piotrpasich.com/phpstorm-vagrant-and-xdebug/
+https://sandro-keil.de/blog/2014/12/30/vagrant-remote-php-cli-debugging/
+
+Tip: for debugging CLI type:
+
+```
+bin/cli_debug.sh YOUR_COMMAND
+```
+
+for example
+
+```
+bin/cli_debug.sh bin/console app:test
+```
 
 Symfony Standard Edition
 ========================
