@@ -9,7 +9,7 @@ Kategorie
 
 {% for item in categories %}
     <p>
-    <a href="/renaissance/artykuly/{{ item.getSlug() }}">
+    <a href="{{ path('_category', {'category': item.getSlug()}) }}">
         {{ item.getSlug() }}
     </a> #{{ item.getIdArticleCategory() }}
     </p>

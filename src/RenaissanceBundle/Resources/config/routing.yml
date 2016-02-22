@@ -4,12 +4,12 @@ renaissance_homepage:
 
 _index:
     path:     /artykuly
-    defaults: { _controller: RenaissanceBundle:Article:Index }
+    defaults: { _controller: RenaissanceBundle:Article:index }
 
 _category:
     path:     /artykuly/{category}
-    defaults: { _controller: RenaissanceBundle:Article:Category }
+    defaults: { _controller: RenaissanceBundle:Article:category }
 
 _show:
     path:     /artykuly/{category}/{slug}
-    defaults: { _controller: RenaissanceBundle:Article:Show }
+    defaults: { _controller: RenaissanceBundle:Article:show }

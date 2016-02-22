@@ -5,7 +5,7 @@
 {% block body %}
 <h1>Welcome to the Article:Show page</h1>
 
-<a href="{{ path('_category', {'category': 'chrono-cross'}) }}">back to list</a>
+<a href="{{ path('_category', {'category': article.getCategory().getSlug()}) }}">back to list</a>
 
 <h1>Artykuł</h1>
 

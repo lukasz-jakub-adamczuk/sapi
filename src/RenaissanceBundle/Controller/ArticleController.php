@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends Controller
 {
-    public function IndexAction()
+    public function indexAction()
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
@@ -45,13 +45,14 @@ class ArticleController extends Controller
         //     ]
         // );
 
-        return $this->render('RenaissanceBundle:Article:index.html.twig', array(
+        return $this->render('RenaissanceBundle:Article:index.html.twig', [
             'categories' => $articleCategories
-        ));
+        ]);
     }
 
-    public function CategoryAction($category)
+    public function categoryAction($category)
     {
+        $slug = $category;
         // $req = new Request();
         // $db = new Connection();
 
@@ -73,28 +74,65 @@ class ArticleController extends Controller
 
         // $articles = $db->fetchAll($sql);
 
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        // $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        // $repository = $entityManager->getRepository(Article::class);
-        $repository = $entityManager->getRepository('AppBundle:Article');
+        // // $repository = $entityManager->getRepository(Article::class);
+        // $repository = $entityManager->getRepository('AppBundle:Article');
 
-        // $articles = $repository->findByIdUser('140');
-        $articles = $repository->findAll();
+        // // $articles = $repository->findByIdUser('140');
+        // $articles = $repository->findAll();
         // $articles = $repository->findOneByIdJoinedToCategory($category);
 
+        // $queryBuilder = $entityManager->createQueryBuilder();
+        // $queryBuilder->select('a', 'ac')
+        //     ->from('AppBundle:Article', 'a')
+        //     ->join('a.AppBundle:ArticleCategory', 'ac')
+        //     ->where('ac.slug=' . $category);
 
-        $em = $this->get('doctrine.orm.entity_manager');
+        // $result = $queryBuilder->getQuery()->getResult();
 
-        $query = $em->createQuery('SELECT a, ac FROM AppBundle:Article a JOIN a.id_article_category ac');
-        $articles2 = $query->getResult();
+
+        // $repository = $this->getDoctrine()
+        //     ->getRepository('AppBundle:Article');
+
+        // $query = $repository->createQueryBuilder('a')
+        //     ->where('a.id_article_category = :category')
+        //     ->setParameter('category', $category)
+        //     ->getQuery();
+
+        // $result = $query->getResult();
+
+        
+        
+        $repository = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:ArticleCategory');
+
+        // echo $slug;
+
+        /** @var ArticleCategory $category */
+        $category = $repository->findOneBy(['slug' => $slug]);
+        // $category = $repository->findOneBySlug($slug);
+
+        $articles = $category->getArticles();
+
+        // print_r($category);
+        // print_r($articles->get('recenzja'));
+        // print_r(count($articles));
+
+        // print_r($articles[0]);
+
+        // $em = $this->get('doctrine.orm.entity_manager');
+
+        // $query = $em->createQuery('SELECT a, ac FROM AppBundle:Article a JOIN a.id_article_category ac');
+        // $articles2 = $query->getResult();
 
         return $this->render('RenaissanceBundle:Article:category.html.twig', array(
-            'articles' => $articles2
+            'articles' => $articles
         ));
     }
 
-    public function ShowAction($category, $slug)
+    public function showAction($category, $slug)
     {
+
         // $category = $req->get('category', false);
         // $slug = $req->get('slug', false);
 
@@ -122,19 +160,40 @@ class ArticleController extends Controller
         // return false;
         $id = 6;
 
-        $article = $this->getDoctrine()
-            ->getRepository('AppBundle:Article')
-            // ->findOneByIdJoinedToCategory($s);
-            ->findById($id);
+        // $article = $this->getDoctrine()
+        //     ->getRepository('AppBundle:Article')
+        //     // ->findOneByIdJoinedToCategory($s);
+        //     ->findById($id);
 
+        $repository = $this->get('doctrine.orm.entity_manager')->getRepository('AppBundle:ArticleCategory');
 
-        if (!$article) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+        // echo $slug;
+
+        /** @var ArticleCategory $category */
+        $categoryRepo = $repository->findOneBy(['slug' => $category]);
+        // $category = $repository->findOneBySlug($slug);
+
+        $articles = $categoryRepo->getArticles();
+
+        // $article = $articles->findOneBy(['title' => $slug]);
+        // print_r($articles->getValues());
+
+        // $article = $articles[10];
+
+        foreach ($articles as $item) {
+            if ($item->getSlug() == $slug) {
+                $article = $item;
+            }
         }
 
-        print_r($article);
+
+        // if (!$article) {
+        //     throw $this->createNotFoundException(
+        //         'No product found for id '.$id
+        //     );
+        // }
+
+        // print_r($article);
 
         // return $this->render(
         //     'news/show.html.twig',
