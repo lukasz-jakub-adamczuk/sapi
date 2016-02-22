@@ -15,5 +15,7 @@
 /vendor/
 /web/bundles/
 
+.vagrant
+
 .DS_Store
 *.php~
