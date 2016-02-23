@@ -55,6 +55,7 @@ class ArticleController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
+        // 1st way
         $categoryRepo = $repository->findOneBy(['slug' => $category]);
         // $categoryRepo = $repository->findOneBySlug($slug);
 
@@ -69,6 +70,18 @@ class ArticleController extends Controller
                 $article = $item;
             }
         }
+
+        // 2nd way
+        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->select('a')
+            ->from('AppBundle:Article', 'a')
+            ->innerJoin('a.category', 'ac')
+            ->where('ac.slug=:category_slug', 'a.slug=:article_slug')
+            ->setParameter(':category_slug', $category)
+            ->setParameter(':article_slug', $slug);
+
+        $article = $queryBuilder->getQuery()->getSingleResult();
 
 
         return $this->render('RenaissanceBundle:Article:show.html.twig', array(
