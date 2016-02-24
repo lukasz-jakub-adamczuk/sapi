@@ -2,45 +2,40 @@
 
 namespace Core\Service;
 
-use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\Request;
+// use Doctrine\DBAL\Connection;
+// use Symfony\Component\HttpFoundation\Request;
 
 // use Squarezone\Exception\SquarezoneException;
 
 class ArticleProvider
 {
-	// 
-	// public function __construct(EntityRepository $repository)
-	// {
-		// ...
-	// }
-
-	public function get(Request $req, Connection $db)
+    private $repository;
+    
+    public function __construct($repository)
     {
-        $category = $req->get('category', false);
-        $slug = $req->get('slug', false);
+        $this->repository = $repository;
+    }
 
-        // if (empty($category) || empty($slug)) {
-        //     throw new SquarezoneException();
-        // }
+    public function get($category, $slug)
+    {
+        // $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
-        $sql = 'SELECT a.*, ac.slug AS category 
-                FROM article a 
-                LEFT JOIN article_category ac ON(ac.id_article_category=a.id_article_category) 
-                WHERE ac.slug="%s" AND a.slug="%s"';
+        // 1st way
+        $categoryRepo = $this->repository->findOneBy(['slug' => $category]);
+        // $categoryRepo = $repository->findOneBySlug($slug);
 
-        $sql = sprintf($sql, $category, $slug);
+        $articles = $categoryRepo->getArticles();
 
-        // $whereParts = [];
+        // $article = $articles->findOneBy(['title' => $slug]);
+        // print_r($articles->getValues());
 
-        // $whereParts[] = sprintf('ac.slug="%s"', $category);
-        // $whereParts[] = sprintf('a.slug="%s"', $slug);
-
-        // $sql .= ' WHERE ' . implode(' AND ', $whereParts);
-
-        if ($result = $db->fetchAssoc($sql)) {
-            return $result;
+        // filtering
+        foreach ($articles as $item) {
+            if ($item->getSlug() == $slug) {
+                $article = $item;
+            }
         }
-        return false;
+
+        return $article;
     }
 }

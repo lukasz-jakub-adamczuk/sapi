@@ -7,10 +7,8 @@
 
 <a href="{{ path('_category', {'category': article.getCategory().getSlug()}) }}">back to list</a>
 
-<h1>Artykuł</h1>
-Kategoria: {{ article.category.slug }}
-
 <h2>{{ article.title }}</h2>
+<h3>Kategoria: {{ article.category.slug }}</h3>
 
 <div>
 	{{ article.markup|raw }}

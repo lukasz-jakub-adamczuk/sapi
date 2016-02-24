@@ -15,8 +15,9 @@ use AppBundle\Entity\ArticleRepository;
 
 
 // imports for showAction
-use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\Request;
+// use Doctrine\DBAL\Connection;
+// use Symfony\Component\HttpFoundation\Request;
+use Core\Service\ArticleProvider;
 
 
 class ArticleController extends Controller
@@ -53,7 +54,7 @@ class ArticleController extends Controller
 
     public function showAction($category, $slug)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
+        /*$repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
         // 1st way
         $categoryRepo = $repository->findOneBy(['slug' => $category]);
@@ -69,10 +70,10 @@ class ArticleController extends Controller
             if ($item->getSlug() == $slug) {
                 $article = $item;
             }
-        }
+        }*/
 
         // 2nd way
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+        /*$queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->select('a')
             ->from('AppBundle:Article', 'a')
@@ -81,8 +82,16 @@ class ArticleController extends Controller
             ->setParameter(':category_slug', $category)
             ->setParameter(':article_slug', $slug);
 
-        $article = $queryBuilder->getQuery()->getSingleResult();
+        $article = $queryBuilder->getQuery()->getSingleResult();*/
 
+        // 3rd way
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
+
+
+        $articleProvider = new ArticleProvider($repository);
+        $article = $articleProvider->get($category, $slug);
 
         return $this->render('RenaissanceBundle:Article:show.html.twig', array(
             'article' => $article,
