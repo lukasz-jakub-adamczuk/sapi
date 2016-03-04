@@ -2,6 +2,7 @@
 
 namespace RenaissanceBundle\Controller;
 
+use Core\Exception\MissingParamsException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 // imports for indexAction
@@ -39,13 +40,9 @@ class ArticleController extends Controller
     {
         $slug = $category;
 
-        
         $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
-        $categoryRepo = $repository->findOneBy(['slug' => $slug]);
-        // $categoryRepo = $repository->findOneBySlug($slug);
-
-        $articles = $categoryRepo->getArticles();
+        $articles = (new ArticleProvider($repository))->getList($slug); // TODO: try catch clause
 
         return $this->render('RenaissanceBundle:Article:category.html.twig', array(
             'articles' => $articles
@@ -54,44 +51,19 @@ class ArticleController extends Controller
 
     public function showAction($category, $slug)
     {
-        /*$repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
-
-        // 1st way
-        $categoryRepo = $repository->findOneBy(['slug' => $category]);
-        // $categoryRepo = $repository->findOneBySlug($slug);
-
-        $articles = $categoryRepo->getArticles();
-
-        // $article = $articles->findOneBy(['title' => $slug]);
-        // print_r($articles->getValues());
-
-        // filtering
-        foreach ($articles as $item) {
-            if ($item->getSlug() == $slug) {
-                $article = $item;
-            }
-        }*/
-
-        // 2nd way
-        /*$queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-        $queryBuilder->select('a')
-            ->from('AppBundle:Article', 'a')
-            ->innerJoin('a.category', 'ac')
-            ->where('ac.slug=:category_slug', 'a.slug=:article_slug')
-            ->setParameter(':category_slug', $category)
-            ->setParameter(':article_slug', $slug);
-
-        $article = $queryBuilder->getQuery()->getSingleResult();*/
-
-        // 3rd way
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
         $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
 
+        try {
+            $articleProvider = new ArticleProvider($repository);
+            $article = $articleProvider->get($category, $slug); // TODO: try catch clause
+        } catch (MissingParamsException $e) {
+            $this->addFlash('error', 'Missing parameter');
+            $this->redirectTo('/');
+        }
 
-        $articleProvider = new ArticleProvider($repository);
-        $article = $articleProvider->get($category, $slug);
+        // how to use flashbag: http://symfony.com/doc/current/book/controller.html#flash-messages
 
         return $this->render('RenaissanceBundle:Article:show.html.twig', array(
             'article' => $article,

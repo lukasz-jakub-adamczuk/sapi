@@ -20,19 +20,11 @@ class ArticleProvider
 
     public function get($category, $slug)
     {
-        if (empty($category) || empty($slug)) {
+        if (empty($slug)) {
             throw new MissingParamsException();
         }
 
-        $categoryRepo = $this->repository->findOneBy(['slug' => $category]);
-
-        // var_dump($categoryRepo);
-        if (!($categoryRepo instanceof ArticleCategory)) {
-            throw new MissingEntityException();
-            
-        }
-
-        $articles = $categoryRepo->getArticles();
+        $articles = $this->getList($category);
 
         $article = null;
 
@@ -49,5 +41,28 @@ class ArticleProvider
         }
 
         return $article;
+    }
+
+    /**
+     * @param $category
+     *
+     * @return array
+     */
+    public function getList($category)
+    {
+        if (empty($category)) {
+            throw new MissingParamsException();
+        }
+        $categoryRepo = $this->repository->findOneBy(['slug' => $category]);
+
+        // var_dump($categoryRepo);
+        if (!($categoryRepo instanceof ArticleCategory)) {
+            throw new MissingEntityException();
+
+        }
+
+        $articles = $categoryRepo->getArticles();
+
+        return $articles;
     }
 }
