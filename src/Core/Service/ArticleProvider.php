@@ -2,38 +2,50 @@
 
 namespace Core\Service;
 
-// use Doctrine\DBAL\Connection;
-// use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityRepository;
 
-// use Squarezone\Exception\SquarezoneException;
+use AppBundle\Entity\ArticleCategory;
+
+use Core\Exception\MissingParamsException;
+use Core\Exception\MissingEntityException;
 
 class ArticleProvider
 {
     private $repository;
     
-    public function __construct($repository)
+    public function __construct(EntityRepository $repository)
     {
         $this->repository = $repository;
     }
 
     public function get($category, $slug)
     {
-        // $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
+        if (empty($category) || empty($slug)) {
+            throw new MissingParamsException();
+        }
 
-        // 1st way
         $categoryRepo = $this->repository->findOneBy(['slug' => $category]);
-        // $categoryRepo = $repository->findOneBySlug($slug);
+
+        // var_dump($categoryRepo);
+        if (!($categoryRepo instanceof ArticleCategory)) {
+            throw new MissingEntityException();
+            
+        }
 
         $articles = $categoryRepo->getArticles();
 
-        // $article = $articles->findOneBy(['title' => $slug]);
-        // print_r($articles->getValues());
+        $article = null;
 
         // filtering
         foreach ($articles as $item) {
             if ($item->getSlug() == $slug) {
                 $article = $item;
+                return $article;
             }
+        }
+
+        if (is_null($article)) {
+            throw new MissingEntityException();
         }
 
         return $article;
