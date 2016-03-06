@@ -24,6 +24,7 @@ class ArticleController extends Controller
 {
     public function indexAction()
     {
+        // 
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
         $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
@@ -39,13 +40,20 @@ class ArticleController extends Controller
     {
         $slug = $category;
 
+        // ArticleCategoryListProvider
+
         
+        // $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
+
+        // $categoryRepo = $repository->findOneBy(['slug' => $slug]);
+        // // $categoryRepo = $repository->findOneBySlug($slug);
+
+        // $articles = $categoryRepo->getArticles();
+
         $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
-        $categoryRepo = $repository->findOneBy(['slug' => $slug]);
-        // $categoryRepo = $repository->findOneBySlug($slug);
-
-        $articles = $categoryRepo->getArticles();
+        $articleProvider = new ArticleProvider($repository);
+        $articles = $articleProvider->getArticles($category);
 
         return $this->render('RenaissanceBundle:Article:category.html.twig', array(
             'articles' => $articles
@@ -85,9 +93,13 @@ class ArticleController extends Controller
         $article = $queryBuilder->getQuery()->getSingleResult();*/
 
         // 3rd way
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        // $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
+        // $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
+
+        // $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
 
         $articleProvider = new ArticleProvider($repository);
