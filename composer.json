@@ -25,7 +25,11 @@
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^2.7",
-        "phpspec/phpspec": "^2.4"
+        "phpspec/phpspec": "^2.4",
+        "phing/phing": "^2.13",
+        "phpmd/phpmd": "^2.3",
+        "sebastian/phpcpd": "^2.0",
+        "squizlabs/php_codesniffer": "^2.5"
     },
     "scripts": {
         "post-install-cmd": [
@@ -48,7 +52,8 @@
     "config": {
         "platform": {
             "php": "5.5.9"
-        }
+        },
+        "bin-dir": "bin"
     },
     "extra": {
         "symfony-app-dir": "app",
