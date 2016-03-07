@@ -34,9 +34,9 @@ class ArticleProvider
         return $categoryEntity->getArticles();
     }
 
-    public function get($category, $slug)
+    public function get($category, $title)
     {
-        if (empty($slug)) {
+        if (empty($title)) {
             throw new MissingParamsException();
         }
 
@@ -46,7 +46,7 @@ class ArticleProvider
 
         // filtering
         foreach ($articles as $item) {
-            if ($item->getSlug() == $slug) {
+            if ($item->getSlug() == $title) {
                 $article = $item;
                 return $article;
             }

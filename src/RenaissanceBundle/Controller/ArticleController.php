@@ -18,21 +18,21 @@ use AppBundle\Entity\ArticleRepository;
 // use Doctrine\DBAL\Connection;
 // use Symfony\Component\HttpFoundation\Request;
 use Core\Service\ArticleProvider;
+use Core\Service\ArticleCategoryProvider;
 
 
 class ArticleController extends Controller
 {
     public function indexAction()
     {
-        // 
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
 
-        $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
-
-        $articleCategories = $repository->findAll();
+        // $categories = $repository->findAll();
+        $articleCategoryProvider = new ArticleCategoryProvider($repository);
+        $categories = $articleCategoryProvider->getAll();
 
         return $this->render('RenaissanceBundle:Article:index.html.twig', [
-            'categories' => $articleCategories
+            'categories' => $categories
         ]);
     }
 

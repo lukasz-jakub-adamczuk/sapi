@@ -24,10 +24,10 @@ class ArticleProviderSpec extends ObjectBehavior
         $this->beConstructedWith($repository);
     }
 
-    function it_returns_article_for_params(EntityRepository $repository, ArticleCategory $categoryRepo)
+    function it_returns_article_for_params(EntityRepository $repository, ArticleCategory $categoryEntity)
     {
         $category = 'chrono-trigger';
-        $slug = 'recenzja';
+        $title = 'recenzja';
 
         $firstArticle = new Article();
         $firstArticle->setSlug('wstep');
@@ -35,16 +35,16 @@ class ArticleProviderSpec extends ObjectBehavior
         $secondArticle = new Article();
         $secondArticle->setSlug('recenzja');
 
-        $repository->findOneBy(['slug' => $category])->willReturn($categoryRepo);
-        $categoryRepo->getArticles()->willReturn([$firstArticle, $secondArticle]);
+        $repository->findOneBy(['slug' => $category])->willReturn($categoryEntity);
+        $categoryEntity->getArticles()->willReturn([$firstArticle, $secondArticle]);
 
-        $this->get($category, $slug)->shouldReturn($secondArticle);
+        $this->get($category, $title)->shouldReturn($secondArticle);
     }
 
-    function it_throws_exception_when_article_is_missing(EntityRepository $repository, ArticleCategory $categoryRepo)
+    function it_throws_exception_when_article_is_missing(EntityRepository $repository, ArticleCategory $categoryEntity)
     {
         $category = 'chrono-trigger';
-        $slug = 'solucja';
+        $title = 'solucja';
 
         $firstArticle = new Article();
         $firstArticle->setSlug('wstep');
@@ -52,31 +52,31 @@ class ArticleProviderSpec extends ObjectBehavior
         $secondArticle = new Article();
         $secondArticle->setSlug('recenzja');
 
-        $repository->findOneBy(['slug' => $category])->willReturn($categoryRepo);
-        $categoryRepo->getArticles()->willReturn([$firstArticle, $secondArticle]);
+        $repository->findOneBy(['slug' => $category])->willReturn($categoryEntity);
+        $categoryEntity->getArticles()->willReturn([$firstArticle, $secondArticle]);
 
-        // $this->get($category, $slug)->shouldThro($secondArticle);
-        $this->shouldThrow(MissingEntityException::class)->during('get', [$category, $slug]);
+        // $this->get($category, $title)->shouldThro($secondArticle);
+        $this->shouldThrow(MissingEntityException::class)->during('get', [$category, $title]);
     }
 
     function it_throws_exception_when_category_is_missing(EntityRepository $repository)
     {
         $category = 'abc';
-        $slug = 'recenzja';
+        $title = 'recenzja';
 
         $repository->findOneBy(['slug' => $category])->willReturn(null);
 
-        $this->shouldThrow(MissingEntityException::class)->during('get', [$category, $slug]);
+        $this->shouldThrow(MissingEntityException::class)->during('get', [$category, $title]);
     }
 
     function it_throws_exception_when_params_are_incorrect(EntityRepository $repository)
     {
         $category = false;
-        $slug = false;
+        $title = false;
 
         $repository->findOneBy(['slug' => $category])->shouldNotBeCalled();
 
-        $this->shouldThrow(MissingParamsException::class)->during('get', [$category, $slug]);
+        $this->shouldThrow(MissingParamsException::class)->during('get', [$category, $title]);
     }
 
 }
