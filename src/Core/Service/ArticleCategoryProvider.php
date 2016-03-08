@@ -2,9 +2,9 @@
 
 namespace Core\Service;
 
-use Doctine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository;
 
-use AppBindle\Entity\ArticleCategory;
+use AppBundle\Entity\ArticleCategory;
 
 use Core\Exception\MissingParamsException;
 use Core\Exception\MissingEntityException;
@@ -20,15 +20,21 @@ class ArticleCategoryProvider
 
     public function getAll()
     {
-        return $this->repository->findAll();
-    }
+        $categories = $this->repository->findAll();
 
-    public function get($name)
-    {
-        if (empty($name)) {
-            throw new MissingParamsException();
+        if (empty($categories)) {
+            throw new MissingEntityException();
         }
 
-        return $this->repository->findOneBy(['slug' => $name]);
+        return $categories;
     }
+
+    // public function get($name)
+    // {
+    //     if (empty($name)) {
+    //         throw new MissingParamsException();
+    //     }
+
+    //     return $this->repository->findOneBy(['slug' => $name]);
+    // }
 }

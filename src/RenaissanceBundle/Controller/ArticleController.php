@@ -4,19 +4,10 @@ namespace RenaissanceBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-// imports for indexAction
-// use AppBundle\Entity\News;
 use AppBundle\Entity\ArticleCategory;
 use AppBundle\Entity\Article;
+// use AppBundle\Entity\ArticleRepository;
 
-use AppBundle\Entity\ArticleRepository;
-
-// imports for CategoryAction
-
-
-// imports for showAction
-// use Doctrine\DBAL\Connection;
-// use Symfony\Component\HttpFoundation\Request;
 use Core\Service\ArticleProvider;
 use Core\Service\ArticleCategoryProvider;
 
