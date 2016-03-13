@@ -1,0 +1,16 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RenaissanceBundle:News:show{% endblock %}
+
+{% block body %}
+<h1>Welcome to the News:show page</h1>
+
+<a href="{{ path('news_index') }}">Powrót</a>
+
+<h2>{{ news.title }}</h2>
+
+<div>
+	{{ news.markup|raw }}
+</div>
+
+{% endblock %}

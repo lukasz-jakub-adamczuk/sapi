@@ -4,6 +4,15 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    EntityRepository.ArticleCategory:
+        class: Doctrine\ORM\EntityRepository
+        # factory_service: doctrine.orm.entity_manager
+        # factory_method: getRepository
+        factory: ["@doctrine", "getRepository"]
+        arguments:
+            - AppBundle\Entity\ArticleCategory
+
+    Service.ArticleCategory:
+        class: Core\Service\ArticleCategoryProvider
+        arguments:
+            - "@EntityRepository.ArticleCategory"

@@ -16,10 +16,11 @@ class ArticleController extends Controller
 {
     public function indexAction()
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
-
+        // $repository = $this->getDoctrine()->getRepository('AppBundle:ArticleCategory');
+        
         // $categories = $repository->findAll();
-        $articleCategoryProvider = new ArticleCategoryProvider($repository);
+        // $articleCategoryProvider = new ArticleCategoryProvider($repository);
+        $articleCategoryProvider = $this->get('Service.ArticleCategory');
         $categories = $articleCategoryProvider->getAll();
 
         return $this->render('RenaissanceBundle:Article:index.html.twig', [

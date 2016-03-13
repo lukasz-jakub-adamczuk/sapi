@@ -13,3 +13,11 @@ _category:
 _show:
     path:     /artykuly/{category}/{slug}
     defaults: { _controller: RenaissanceBundle:Article:show }
+
+news_index:
+    path:     /aktualnosci
+    defaults: { _controller: RenaissanceBundle:News:index }
+
+news_show:
+    path:     /aktualnosci/{id}
+    defaults: { _controller: RenaissanceBundle:News:show }
