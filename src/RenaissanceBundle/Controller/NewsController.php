@@ -19,11 +19,21 @@ class NewsController extends Controller
         ]);
     }
 
-    public function showAction($id)
+    public function showAction($year, $month, $day, $title)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:News');
 
-        $news = $repository->findOneBy(['idNews' => $id]);
+        $date = implode('-', [$year, $month, $day]);
+        // echo $date;
+
+        $criteria = [
+            // 'idNews' => 1
+            // 'creationDate' => implode('-', [$year, $month, $day]),
+            // 'creationDate' => new \DateTime($date),
+            'slug' => $title
+        ];
+
+        $news = $repository->findOneBy($criteria);
         // $news = $repository->findOneByIdNews($id);
 
         return $this->render('RenaissanceBundle:News:show.html.twig', [

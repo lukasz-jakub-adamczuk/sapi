@@ -5,13 +5,13 @@
 {% block body %}
 <h1>Welcome to the Article:Index page</h1>
 
-<a href="{{ path('_index') }}">back to list</a>
+<a href="{{ path('article_index') }}">back to list</a>
 
 <h2>Artykuły z kategorii...</h2>
 
 {% for item in articles %}
     <p>
-    <a href="{{ path('_show', {'category': item.getCategory().getSlug(), 'slug': item.getSlug()} ) }}">
+    <a href="{{ path('article_show', {'category': item.getCategory().getSlug(), 'slug': item.getSlug()} ) }}">
         {{ item.getSlug() }}
     </a>
     </p>

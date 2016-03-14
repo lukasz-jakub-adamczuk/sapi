@@ -9,7 +9,7 @@
 
 {% for item in categories %}
     <p>
-    <a href="{{ path('_category', {'category': item.getSlug()}) }}">
+    <a href="{{ path('article_category', {'category': item.getSlug()}) }}">
         {{ item.getSlug() }}
     </a> #{{ item.getIdArticleCategory() }}
     </p>

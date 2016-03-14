@@ -2,22 +2,32 @@ renaissance_homepage:
     path:     /
     defaults: { _controller: RenaissanceBundle:Default:index }
 
-_index:
-    path:     /artykuly
-    defaults: { _controller: RenaissanceBundle:Article:index }
-
-_category:
-    path:     /artykuly/{category}
-    defaults: { _controller: RenaissanceBundle:Article:category }
-
-_show:
-    path:     /artykuly/{category}/{slug}
-    defaults: { _controller: RenaissanceBundle:Article:show }
 
 news_index:
     path:     /aktualnosci
     defaults: { _controller: RenaissanceBundle:News:index }
 
+news_by_year:
+    path:     /aktualnosci/{year}
+    defaults: { _controller: RenaissanceBundle:News:newsByYear }
+
+news_by_month:
+    path:     /aktualnosci/{year}/{month}
+    defaults: { _controller: RenaissanceBundle:News:newsByMonth }
+
 news_show:
-    path:     /aktualnosci/{id}
+    path:     /aktualnosci/{year}/{month}/{day}/{title}
     defaults: { _controller: RenaissanceBundle:News:show }
+
+
+article_index:
+    path:     /artykuly
+    defaults: { _controller: RenaissanceBundle:Article:index }
+
+article_category:
+    path:     /artykuly/{category}
+    defaults: { _controller: RenaissanceBundle:Article:category }
+
+article_show:
+    path:     /artykuly/{category}/{slug}
+    defaults: { _controller: RenaissanceBundle:Article:show }
