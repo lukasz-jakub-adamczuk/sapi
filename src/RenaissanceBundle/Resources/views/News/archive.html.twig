@@ -7,7 +7,7 @@
 
 {% for item in news %}
 	<p>
-		<a href="{{ path('news_archive_by_year', {'year': item.year}) }}">{{ item.year }}</a>
+		<a href="{{ path('news_archive_by_year', {'year': item.year}) }}">{{ item.year }}</a> ({{ item.items }} aktualności)
 	</p>
 {% endfor %}
 

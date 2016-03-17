@@ -15,9 +15,9 @@ news_archive_by_year:
     path:     /aktualnosci/{year}
     defaults: { _controller: RenaissanceBundle:News:archiveByYear }
 
-news_archive_by_month:
+news_archive_by_year_and_month:
     path:     /aktualnosci/{year}/{month}
-    defaults: { _controller: RenaissanceBundle:News:archiveByMonth }
+    defaults: { _controller: RenaissanceBundle:News:archiveByYearAndMonth }
 
 news_show:
     path:     /aktualnosci/{year}/{month}/{day}/{title}

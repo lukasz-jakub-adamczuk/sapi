@@ -1,0 +1,20 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RenaissanceBundle:News:index{% endblock %}
+
+{% block body %}
+<h1>Aktualności (rok: {{ app.request.get('year', NULL, true) }}, miesiąc: {{ app.request.get('month', NULL, true) }})</h1>
+
+{% for item in news %}
+	<p>
+		{#<a href="{{ path('news_show', {'year': item.year, 'month': item.month}) }}">Miesiąc {{ item.month }}</a> ({{ item.items }} aktualności)#}
+		<a href="{{ path('news_show', {'year': item.0.creationDate|date('Y'), 'month': item.0.creationDate|date('m'), 'day': item.0.creationDate|date('d'), 'title': item.0.slug}) }}">{{ item.0.title }}</a>
+	</p>
+{% endfor %}
+
+
+{# {% else %}
+	Jakoś brak newsa :(
+{% endif %} #}
+
+{% endblock %}

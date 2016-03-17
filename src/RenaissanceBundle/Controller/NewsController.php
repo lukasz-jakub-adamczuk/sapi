@@ -28,7 +28,7 @@ class NewsController extends Controller
         $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
 
 //        $queryBuilder->select('n', 'YEAR(n.creationDate) year')
-        $queryBuilder->select('n, YEAR(n.creationDate) AS year')
+        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year')
             ->from('AppBundle:News', 'n')
 //            ->where('n.idAuthor=140');
 //            ->groupBy('n.idAuthor');
@@ -50,18 +50,35 @@ class NewsController extends Controller
 
     public function archiveByYearAction($year)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:News');
-
         $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
 
-        $queryBuilder->select('n, YEAR(n.creationDate) AS year')
+        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
             ->from('AppBundle:News', 'n')
             ->where('YEAR(n.creationDate)=:year')
+            ->groupBy('month')
             ->setParameter(':year', $year);
 
         $news = $queryBuilder->getQuery()->getArrayResult();
 
         return $this->render('RenaissanceBundle:News:archiveByYear.html.twig', [
+            'news' => $news
+        ]);
+    }
+
+    public function archiveByYearAndMonthAction($year, $month)
+    {
+        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
+            ->from('AppBundle:News', 'n')
+            ->where('YEAR(n.creationDate)=:year', 'MONTH(n.creationDate)=:month')
+            ->groupBy('n.idNews')
+            ->setParameter(':year', $year)
+            ->setParameter(':month', $month);
+
+        $news = $queryBuilder->getQuery()->getArrayResult();
+
+        return $this->render('RenaissanceBundle:News:archiveByYearAndMonth.html.twig', [
             'news' => $news
         ]);
     }
