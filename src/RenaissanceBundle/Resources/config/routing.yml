@@ -4,16 +4,20 @@ renaissance_homepage:
 
 
 news_index:
-    path:     /aktualnosci
+    path:     /aktualnosci/ostatnie
     defaults: { _controller: RenaissanceBundle:News:index }
 
-news_by_year:
-    path:     /aktualnosci/{year}
-    defaults: { _controller: RenaissanceBundle:News:newsByYear }
+news_archive:
+    path:     /aktualnosci
+    defaults: { _controller: RenaissanceBundle:News:archive }
 
-news_by_month:
+news_archive_by_year:
+    path:     /aktualnosci/{year}
+    defaults: { _controller: RenaissanceBundle:News:archiveByYear }
+
+news_archive_by_month:
     path:     /aktualnosci/{year}/{month}
-    defaults: { _controller: RenaissanceBundle:News:newsByMonth }
+    defaults: { _controller: RenaissanceBundle:News:archiveByMonth }
 
 news_show:
     path:     /aktualnosci/{year}/{month}/{day}/{title}

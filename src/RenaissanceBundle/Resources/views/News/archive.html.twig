@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}RenaissanceBundle:News:index{% endblock %}
+
+{% block body %}
+<h1>Archiwum</h1>
+
+{% for item in news %}
+	<p>
+		<a href="{{ path('news_archive_by_year', {'year': item.year}) }}">{{ item.year }}</a>
+	</p>
+{% endfor %}
+
+
+{# {% else %}
+	Jakoś brak newsa :(
+{% endif %} #}
+
+{% endblock %}

@@ -5,15 +5,13 @@
 {% block body %}
 <h1>Aktualności</h1>
 
-{# {% if news %} #}
-
-
 {% for item in news %}
 	<p>
-		{# <a href="{{ path('news_show', {'year': '2015', 'month': '01', 'day': '01', 'title': item.slug|default:'test'}) }}">{{ item.title }}</a> #}
-		<a href="{{ path('news_index') }}/{{ item.creationDate|date('Y/m/d') }}/{{ item.slug }}">{{ item.title }}</a>
+		<a href="{{ path('news_show', {'year': item.creationDate|date('Y'), 'month': item.creationDate|date('m'), 'day': item.creationDate|date('d'), 'title': item.slug}) }}">{{ item.title }}</a>
+		{#<a href="{{ path('news_index') }}/{{ item.creationDate|date('Y/m/d') }}/{{ item.slug }}">{{ item.title }}</a>#}
 	</p>
 {% endfor %}
+
 
 {# {% else %}
 	Jakoś brak newsa :(
