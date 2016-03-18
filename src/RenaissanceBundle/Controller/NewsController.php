@@ -2,6 +2,8 @@
 
 namespace RenaissanceBundle\Controller;
 
+use Core\Service\NewsProvider;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AppBundle\Entity\News;
@@ -21,27 +23,8 @@ class NewsController extends Controller
 
     public function archiveAction()
     {
-//        $repository = $this->getDoctrine()->getRepository('AppBundle:News');
-//
-//        $news = $repository->findAll();
-
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-//        $queryBuilder->select('n', 'YEAR(n.creationDate) year')
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year')
-            ->from('AppBundle:News', 'n')
-//            ->where('n.idAuthor=140');
-//            ->groupBy('n.idAuthor');
-            ->groupBy('year');
-
-        $news = $queryBuilder->getQuery()->getArrayResult();
-
-//        print_r($news);
-//        print_r($news[0]);
-
-//        if (is_null($news)) {
-//            throw $this->createNotFoundException('News not found');
-//        }
+        $provider = $this->get('renaissance.service.news');
+        $news = $provider->getNewsArchive();
 
         return $this->render('RenaissanceBundle:News:archive.html.twig', [
             'news' => $news
