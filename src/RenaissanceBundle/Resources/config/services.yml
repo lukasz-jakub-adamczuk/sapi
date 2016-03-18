@@ -1,4 +1,4 @@
 services:
-#    renaissance.example:
-#        class: RenaissanceBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    renaissance.service.news:
+        class: Core\Service\NewsProvider
+        arguments: [@doctrine.orm.entity_manager]
