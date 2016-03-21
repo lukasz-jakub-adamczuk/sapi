@@ -3,15 +3,15 @@
 {% block title %}RenaissanceBundle:News:index{% endblock %}
 
 {% block body %}
-	<a href="{{ path('news_archive_by_year', {'year': news.creationDate|date('Y')}) }}">Powrót</a>
+	<a href="{{ path('news_archive') }}">Powrót</a>
 
     <h1>Archiwum</h1>
 
-	<h1>Aktualności,  (rok: {{ app.request.get('year', NULL, true) }})</h1>
+	<h1>Aktualności,  (rok: {{ params.year }})</h1>
 
 {% for item in news %}
 	<p>
-		<a href="{{ path('news_archive_by_year_and_month', {'year': item.year, 'month': item.month}) }}">{{ item.0.creationDate|date('F') }}</a> ({{ item.items }} aktualności)
+		<a href="{{ path('news_archive_by_year_and_month', {'year': item.0.creationDate|date('Y'), 'month': item.0.creationDate|date('m')}) }}">{{ item.0.creationDate|date('F') }}</a> ({{ item.items }} aktualności)
 	</p>
 {% endfor %}
 

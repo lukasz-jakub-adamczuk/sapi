@@ -2,38 +2,27 @@
 
 namespace RenaissanceBundle\Controller;
 
+//use Core\Service\NewsProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use AppBundle\Entity\News;
+//use AppBundle\Entity\News;
 
 class NewsController extends Controller
 {
     public function indexAction()
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:News');
+        $newsProvider = $this->get('renaissance.service.news');
 
-        $news = $repository->findAll();
+        $news = $newsProvider->getLatestNews();
 
         return $this->render('RenaissanceBundle:News:index.html.twig', [
             'news' => $news
         ]);
     }
 
-    // cmd+alt+v
-    // cmd+alt+n
-    // cmd+shift+o
-    // cmd+shif+a
-    // alt+enter
-
     public function archiveAction()
     {
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year')
-            ->from('AppBundle:News', 'n')
-            ->groupBy('year');
-
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $news = $this->get('renaissance.service.news')->getArchive();
 
         return $this->render('RenaissanceBundle:News:archive.html.twig', [
             'news' => $news
@@ -42,15 +31,7 @@ class NewsController extends Controller
 
     public function archiveByYearAction($year)
     {
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
-            ->from('AppBundle:News', 'n')
-            ->where('YEAR(n.creationDate)=:year')
-            ->groupBy('month')
-            ->setParameter(':year', $year);
-
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
 
         return $this->render('RenaissanceBundle:News:archiveByYear.html.twig', [
             'news' => $news,
@@ -62,16 +43,7 @@ class NewsController extends Controller
 
     public function archiveByYearAndMonthAction($year, $month)
     {
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
-            ->from('AppBundle:News', 'n')
-            ->where('YEAR(n.creationDate)=:year', 'MONTH(n.creationDate)=:month')
-            ->groupBy('n.idNews')
-            ->setParameter(':year', $year)
-            ->setParameter(':month', $month);
-
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $news = $this->get('renaissance.service.news')->getArchiveByYearAndMonth($year, $month);
 
         return $this->render('RenaissanceBundle:News:archiveByYearAndMonth.html.twig', [
             'news' => $news,
@@ -84,17 +56,7 @@ class NewsController extends Controller
 
     public function showAction($year, $month, $day, $title)
     {
-        $date = implode('-', [$year, $month, $day]);
-
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-
-        $queryBuilder->select('n')
-            ->from('AppBundle:News', 'n')
-            ->where('DATE(n.creationDate)=:date', 'n.slug=:slug')
-            ->setParameter(':date', $date)
-            ->setParameter(':slug', $title);
-
-        $news = $queryBuilder->getQuery()->getSingleResult();
+        $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $title);
 
         if (is_null($news)) {
             throw $this->createNotFoundException('News not found');
