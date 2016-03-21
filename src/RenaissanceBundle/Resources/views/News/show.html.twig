@@ -5,7 +5,7 @@
 {% block body %}
 <h1>Welcome to the News:show page</h1>
 
-<a href="{{ path('news_index') }}">Powrót</a>
+<a href="{{ path('news_archive_by_year_and_month', {'year': news.creationDate|date('Y'), 'month': news.creationDate|date('m')}) }}">Powrót</a>
 
 <h2>{{ news.title }}</h2>
 

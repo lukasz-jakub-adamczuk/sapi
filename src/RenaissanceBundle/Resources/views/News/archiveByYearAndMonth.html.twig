@@ -3,6 +3,8 @@
 {% block title %}RenaissanceBundle:News:index{% endblock %}
 
 {% block body %}
+	<a href="{{ path('news_archive_by_year', {'year': params.year}) }}">Powrót</a>
+	<h1>Archiwum</h1>
 <h1>Aktualności (rok: {{ app.request.get('year', NULL, true) }}, miesiąc: {{ app.request.get('month', NULL, true) }})</h1>
 
 {% for item in news %}
