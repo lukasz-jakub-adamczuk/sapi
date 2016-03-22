@@ -5,3 +5,8 @@ renaissance:
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+api:
+    type:     rest
+    resource: AppBundle\Controller\ApiController
+    prefix:   /api/{prefix}

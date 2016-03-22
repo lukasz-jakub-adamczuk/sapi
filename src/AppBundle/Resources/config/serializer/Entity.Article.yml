@@ -1,0 +1,15 @@
+AppBundle\Entity\Article:
+    exclusion_policy: ALL
+    properties:
+        idArticle:
+            expose: true
+            groups: [list, detail]
+        sum:
+            expose: true
+            groups: [detail]
+        slug:
+            expose: true
+            groups: [list]
+        title:
+            expose: true
+            groups: [list]
