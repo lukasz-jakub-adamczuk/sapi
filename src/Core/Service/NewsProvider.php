@@ -2,11 +2,13 @@
 
 namespace Core\Service;
 
+use Doctrine\ORM\EntityManager;
+
 class NewsProvider
 {
     private $entityManager;
 
-    public function __construct($entityManager)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -21,9 +23,12 @@ class NewsProvider
             ->setFirstResult(0)
             ->setMaxResults(20);
 
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $news = $query->getArrayResult();
 
-        return $news;
+            return $news;
+        }
     }
 
     public function getArchive()
@@ -34,9 +39,12 @@ class NewsProvider
             ->from('AppBundle:News', 'n')
             ->groupBy('year');
 
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $news = $query->getArrayResult();
 
-        return $news;
+            return $news;
+        }
     }
 
     public function getArchiveByYear($year)

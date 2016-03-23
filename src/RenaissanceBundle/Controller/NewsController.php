@@ -2,10 +2,7 @@
 
 namespace RenaissanceBundle\Controller;
 
-//use Core\Service\NewsProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-//use AppBundle\Entity\News;
 
 class NewsController extends Controller
 {
