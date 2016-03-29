@@ -11,49 +11,38 @@ namespace AppBundle\Controller;
 use Core\Service\ArticleProvider;
 use Core\Service\ArticleCategoryProvider;
 use FOS\RestBundle\Controller\FOSRestController;
+use JMS\Serializer\SerializationContext;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends FOSRestController
 {
-    public function getTestAction()
-    {
-        $view = $this->view([
-            'foo' => 'bar'
-        ], 200);
-
-        return $this->handleView($view);
-    }
-
-    public function getArticlesAction()
-    {
-        $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
-
-        $articles = $repository->findAll();
-
-        $view = $this->view($articles, 200);
-
-        return $this->handleView($view);
-    }
-
     // news endpoints
-    public function getNewsLatestAction()
+    //public function getNewsAction($year = null, $month = null, $day = null, $slug = null, $mode = null)
+    public function getNewsAction(Request $request)
     {
-        $news = $this->get('renaissance.service.news')->getLatestNews();
+        $mode = $request->get('mode');
+        $year = $request->get('year');
+        $month = $request->get('month');
+        $day = $request->get('day');
+
+        if ($mode == 'archive') {
+            $news = $this->get('renaissance.service.news')->getArchive();
+        } elseif ($year) {
+            $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
+        } elseif ($year && $month) {
+            $news = $this->get('renaissance.service.news')->getArchiveByYearAndMonth($year, $month);
+        } elseif ($year && $month && $day && $slug) {
+            $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $slug);
+        } else {
+            $news = $this->get('renaissance.service.news')->getNewsLatest();
+        }
 
         $view = $this->view($news, 200);
 
         return $this->handleView($view);
     }
 
-    public function getNewsAction()
-    {
-        $news = $this->get('renaissance.service.news')->getArchive();
-
-        $view = $this->view($news, 200);
-
-        return $this->handleView($view);
-    }
-
-    /*public function getNewsAction($year)
+    /*public function getNewAction($id)
     {
         $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
 
@@ -63,7 +52,7 @@ class ApiController extends FOSRestController
     }*/
 
     // article endpoints
-    public function getCategoriesAction()
+    public function getArticlecategoriesAction()
     {
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
 
@@ -76,20 +65,20 @@ class ApiController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function getCategoriesArticlesAction($slug)
+    public function getArticlecategoriesArticlesAction($category)
     {
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
 
         $articleProvider = new ArticleProvider($repository);
 
-        $articles = $articleProvider->getArticles($slug);
+        $articles = $articleProvider->getArticles($category);
 
         $view = $this->view($articles, 200);
 
         return $this->handleView($view);
     }
-/*
-    public function getCategoriesArticlesAction($category, $slug)
+
+    public function getArticlecategoriesArticleAction($category, $slug)
     {
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
 
@@ -98,7 +87,10 @@ class ApiController extends FOSRestController
         $article = $articleProvider->get($category, $slug);
 
         $view = $this->view($article, 200);
+//        $view->setSerializationContext(SerializationContext::create()->setGroups(['list']));
 
+        $view->setSerializationContext(SerializationContext::create());
+        
         return $this->handleView($view);
-    }*/
+    }
 }

@@ -1,0 +1,11 @@
+AppBundle\Entity\Article:
+    exclusion_policy: ALL
+    properties:
+        idArticle:
+            expose: true
+        sum:
+            expose: true
+        slug:
+            expose: true
+        title:
+            expose: true

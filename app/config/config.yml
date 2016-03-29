@@ -70,9 +70,10 @@ doctrine:
                         month: DoctrineExtensions\Query\Mysql\Month
 
 # FOSRest   Configuration
-#fos_rest:
-#    routing_loader:
-#        include_format:       false
+fos_rest:
+    routing_loader:
+        default_format:       json
+        include_format:       false
 
 # Swiftmailer Configuration
 swiftmailer:
