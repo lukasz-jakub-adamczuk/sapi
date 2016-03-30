@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use Core\Service\ArticleProvider;
 use Core\Service\ArticleCategoryProvider;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -87,10 +88,35 @@ class ApiController extends FOSRestController
         $article = $articleProvider->get($category, $slug);
 
         $view = $this->view($article, 200);
+
+//        var_dump(get_class($article));die;
 //        $view->setSerializationContext(SerializationContext::create()->setGroups(['list']));
 
-        $view->setSerializationContext(SerializationContext::create());
-        
+//        $view->setSerializationContext(SerializationContext::create());
+
+        return $this->handleView($view);
+    }
+
+    public function deleteArticlecategoriesArticleAction($id)
+    {
+//        $this->get('core.service.article')->get($category, $slug);
+//
+//        $this->get('core.service.article')->;
+
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $repository = $entityManager->getRepository('AppBundle:Article');
+
+        $article = $repository->find($id);
+
+        if (is_null($article)) {
+            throw $this->createNotFoundException('404 Not Found');
+        }
+
+        $entityManager->remove($article);
+        $entityManager->flush();
+
+        $view = $this->view([], 204);
+
         return $this->handleView($view);
     }
 }

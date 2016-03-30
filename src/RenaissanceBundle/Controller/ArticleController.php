@@ -11,7 +11,6 @@ use AppBundle\Entity\Article;
 use Core\Service\ArticleProvider;
 use Core\Service\ArticleCategoryProvider;
 
-
 class ArticleController extends Controller
 {
     public function indexAction()
@@ -30,7 +29,7 @@ class ArticleController extends Controller
 
     public function categoryAction($category)
     {
-        $slug = $category;
+//        $slug = $category;
 
         // ArticleCategoryListProvider
 
@@ -101,5 +100,4 @@ class ArticleController extends Controller
             'article' => $article,
         ));
     }
-
 }

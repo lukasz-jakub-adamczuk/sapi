@@ -18,7 +18,8 @@
             <arg line="src
                 xml
                 phpmd.xml
-                --suffixes php"/>
+                --suffixes php
+                --exclude **/Entity/*.php,**/Tests/*.php"/>
         </exec>
     </target>
 

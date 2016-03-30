@@ -23,6 +23,8 @@ class AppTestCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $argument = $input->getArgument('argument');
+        // argument should be used because phpmd notice unused variable
+        $argument = $argument;
 
         if ($input->getOption('option')) {
             // ...
@@ -30,5 +32,4 @@ class AppTestCommand extends ContainerAwareCommand
 
         $output->writeln('Command result.');
     }
-
 }

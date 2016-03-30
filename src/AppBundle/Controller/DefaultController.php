@@ -13,7 +13,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
@@ -39,17 +39,10 @@ class DefaultController extends Controller
         // $entityManager->persist($advertiserWithId123);
         // $entityManager->flush();
         return $this->render(
-            // 'article/recent_list.html.twig',
-            'default/index.html.twig',
             [
                 'categories' => $categories,
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             ]
         );
-
-        // replace this example code with whatever you need
-        // return $this->render('default/index.html.twig', [
-        //     'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-        // ]);
     }
 }

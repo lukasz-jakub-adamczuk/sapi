@@ -19,5 +19,4 @@ class NewsControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', 'show/{id}');
     }
-
 }

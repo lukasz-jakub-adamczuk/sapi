@@ -19,7 +19,7 @@ class NewsController extends Controller
      * @Route("/news", name="news-index")
      * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 

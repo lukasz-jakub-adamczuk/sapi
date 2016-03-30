@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-// use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ArticleCategory
@@ -61,7 +60,7 @@ class ArticleCategory
     private $idArticleCategory;
 
     /**
-     * 
+     * @var ArticleCategory[]
      */
     protected $articles;
 
