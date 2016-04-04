@@ -115,6 +115,20 @@ class Article
     }
 
     /**
+     * Set category
+     *
+     * @param string category
+     *
+     * @return Article
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
      * Set idArticleCategory
      *
      * @param integer $idArticleCategory

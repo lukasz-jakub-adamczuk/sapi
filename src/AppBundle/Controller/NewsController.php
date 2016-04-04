@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,131 +14,76 @@ use AppBundle\Entity\ArticleCategory;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class NewsController extends Controller
+class NewsController extends FOSRestController
 {
-    /**
-     * @Route("/news", name="news-index")
-     * @Method("GET")
-     */
-    public function indexAction()
+    public function getNewsAction(Request $request)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $mode = $request->get('mode');
+        $year = $request->get('year');
+        $month = $request->get('month');
+        $day = $request->get('day');
 
-        $repository = $entityManager->getRepository(News::class);
-
-        $news = $repository->findAll();
-
-
-        // $dql = "SELECT n FROM AppBundle:News n";
-        // $query = $entityManager->createQuery($dql)
-        //                        ->setFirstResult(0)
-        //                        ->setMaxResults(20);
-
-        // $news2 = new Paginator($query);
-
-        return $this->render(
-            'news/index.html.twig',
-            [
-                'news' => $news,
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            ]
-        );
-    }
-
-    /**
-     * @Route("/news/{id}", name="news-show")
-     * @Method("GET")
-     */
-    public function showAction($id)
-    {
-        $news = $this->getDoctrine()
-            ->getRepository('AppBundle:News')
-            ->find($id);
-
-        if (!$news) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+        if ($mode == 'archive') {
+            $news = $this->get('renaissance.service.news')->getArchive();
+        } elseif ($year) {
+            $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
+        } elseif ($year && $month) {
+            $news = $this->get('renaissance.service.news')->getArchiveByYearAndMonth($year, $month);
+        } elseif ($year && $month && $day && $slug) {
+            $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $slug);
+        } else {
+            $news = $this->get('renaissance.service.news')->getNewsLatest();
         }
 
-        return $this->render(
-            'news/show.html.twig',
-            [
-                'news' => $news,
-                'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-            ]
-        );
+        $view = $this->view($news, 200);
+
+        return $this->handleView($view);
     }
 
-    /**
-     * @Route("/news", name="news-create")
-     * @Method("POST")
-     */
-    public function createAction(Request $request)
+    public function postNewsAction(Request $request)
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $fields = $request->request->all();
+        $title = $request->request->get('title');
+        $slug = $request->request->get('slug');
+
+        $number = random_int(1, 100);
 
         $news = new News();
-
-        $news->setTitle($fields['title']);
-        $news->setSlug($fields['slug']);
+        $news->setTitle($title . ' ' . $number);
+        $news->setSlug($slug . ' ' . $number);
+        $news->setMarkup('To bedzie nasz news z API dodadny...');
         $news->setIdAuthor(140);
 
         $entityManager->persist($news);
         $entityManager->flush();
 
-        // print_r($result);
+        $view = $this->view($news, 201);
 
-
-        $news = [
-            'title' => $fields['title']
-        ];
-        // $this->getDoctrine()
-        //     ->getRepository('AppBundle:News')
-        //     ->find($id);
-        // $repository = $entityManager->getRepository(News::class);
-
-        // $result = $repository->find();
-
-        // create a JSON-response with a 200 status code
-        $response = new Response(json_encode($news));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->handleView($view);
     }
 
-    /**
-     * @Route("/news/{id}")
-     * @Method("PUT")
-     */
-    public function editAction($id, Request $request)
+    public function putNewsAction(Request $request, $id)
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $fields = $request->request->all();
+        $title = $request->request->get('title');
+        $slug = $request->request->get('slug');
 
-        $repository = $entityManager->getRepository(News::class);
-        $news = $repository->find($id);
+        $number = random_int(1, 100);
 
-        $news->setTitle($fields['title']);
-        $news->setSlug($fields['slug']);
-        $news->setMarkup($fields['markup']);
-        $news->setMarkdown($fields['markdown']);
+        $news = new News();
+        $news->setTitle($title . ' ' . $number);
+        $news->setSlug($slug . ' ' . $number);
+        $news->setMarkup('To bedzie nasz news z API dodadny...');
+        $news->setIdAuthor(140);
 
         $entityManager->persist($news);
         $entityManager->flush();
 
-        $news = [
-            'title' => $fields['title']
-        ];
-        
-        // create a JSON-response with a 200 status code
-        $response = new Response(json_encode($news));
-        $response->headers->set('Content-Type', 'application/json');
+        $view = $this->view($news, 201);
 
-        return $response;
+        return $this->handleView($view);
     }
 
     /**

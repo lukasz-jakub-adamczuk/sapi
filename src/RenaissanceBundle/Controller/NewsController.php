@@ -59,7 +59,6 @@ class NewsController extends Controller
             throw $this->createNotFoundException('News not found');
         }
 
-
         return $this->render('RenaissanceBundle:News:show.html.twig', [
             'news' => $news,
             'params' => [

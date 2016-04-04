@@ -40,8 +40,8 @@ class NewsProviderSpec extends ObjectBehavior
         $this->getArchive();
     }
 
-    function it_returns_news_archive_by_year(EntityManager $entityManager, QueryBuilder $queryBuilder)
-    {
-        $this->getArchiveByYear();
-    }
+//    function it_returns_news_archive_by_year(EntityManager $entityManager, QueryBuilder $queryBuilder)
+//    {
+//        $this->getArchiveByYear();
+//    }
 }

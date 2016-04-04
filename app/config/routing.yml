@@ -5,9 +5,20 @@ renaissance:
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+#    prefix:   /api/v1
 
-api:
-#    resource: "@AppBundle/Controller/ApiController"
-    resource: AppBundle\Controller\ApiController
+#sraapi:
+##    resource: "@AppBundle/Controller/ApiController"
+#    resource: AppBundle\Controller\ApiController
+#    type:     rest
+#    prefix:   /api/v1
+
+#news:
+#    resource: AppBundle\Controller\NewsController
+#    type:     rest
+#    prefix:   /api/v1
+
+articles:
+    resource: AppBundle\Controller\ArticleController
     type:     rest
     prefix:   /api/v1

@@ -2,7 +2,8 @@
 
 namespace Core\Service;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
+//use Doctrine\ORM\EntityRepository;
 
 use AppBundle\Entity\ArticleCategory;
 
@@ -11,14 +12,36 @@ use Core\Exception\MissingEntityException;
 
 class ArticleProvider
 {
+    private $entityManager;
+
     private $repository;
-    
-    public function __construct(EntityRepository $repository)
+
+    public function __construct(EntityManager $entityManager)
     {
-        $this->repository = $repository;
+        $this->entityManager = $entityManager;
+        $this->repository = $this->entityManager->getRepository('AppBundle:ArticleCategory');
     }
 
-    public function getArticles($category)
+    public function getArticles()
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('a')
+            ->from('AppBundle:Article', 'a')
+            ->orderBy('a.creationDate', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $articles = $query->getArrayResult();
+
+            return $articles;
+        }
+        return [];
+    }
+
+    public function getArticlesByCategory($category)
     {
         if (empty($category)) {
             throw new MissingParamsException();
@@ -28,7 +51,6 @@ class ArticleProvider
 
         if (!($categoryEntity instanceof ArticleCategory)) {
             throw new MissingEntityException();
-            
         }
 
         return $categoryEntity->getArticles();
@@ -40,7 +62,7 @@ class ArticleProvider
             throw new MissingParamsException();
         }
 
-        $articles = $this->getArticles($category);
+        $articles = $this->getArticlesByCategory($category);
 
         $article = null;
 

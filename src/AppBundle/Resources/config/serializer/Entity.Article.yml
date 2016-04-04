@@ -3,9 +3,9 @@ AppBundle\Entity\Article:
     properties:
         idArticle:
             expose: true
-        sum:
+        title:
             expose: true
         slug:
             expose: true
-        title:
-            expose: true
+#        category:
+#            expose: true
