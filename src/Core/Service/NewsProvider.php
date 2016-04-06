@@ -35,7 +35,7 @@ class NewsProvider
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year')
+        $queryBuilder->select('COUNT(n.idNews) items, YEAR(n.creationDate) year')
             ->from('AppBundle:News', 'n')
             ->groupBy('year');
 

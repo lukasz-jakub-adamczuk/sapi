@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new AppBundle\AppBundle(),
             new RenaissanceBundle\RenaissanceBundle(),
+//            new GoIntegro\Bundle\HateoasBundle\GoIntegroHateoasBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

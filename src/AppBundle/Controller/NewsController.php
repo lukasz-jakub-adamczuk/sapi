@@ -2,37 +2,48 @@
 
 namespace AppBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 use AppBundle\Entity\News;
-use AppBundle\Entity\ArticleCategory;
-
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Core\Service\NewsCreator;
+use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\Request;
+use Core\Helpers\Utilities;
 
 class NewsController extends FOSRestController
 {
     public function getNewsAction(Request $request)
     {
-        $mode = $request->get('mode');
-        $year = $request->get('year');
-        $month = $request->get('month');
-        $day = $request->get('day');
+        $mode   = $request->get('mode');
+        $year   = $request->get('year');
+        $month  = $request->get('month');
+        $day    = $request->get('day');
+        $slug   = $request->get('slug');
 
-        if ($mode == 'archive') {
-            $news = $this->get('renaissance.service.news')->getArchive();
-        } elseif ($year) {
-            $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
+        if ($year && $month && $day && $slug) {
+            $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $slug);
         } elseif ($year && $month) {
             $news = $this->get('renaissance.service.news')->getArchiveByYearAndMonth($year, $month);
-        } elseif ($year && $month && $day && $slug) {
-            $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $slug);
+        } elseif ($year) {
+            $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
+        } elseif ($mode == 'archive') {
+            $news = $this->get('renaissance.service.news')->getArchive();
         } else {
-            $news = $this->get('renaissance.service.news')->getNewsLatest();
+            $news = $this->get('renaissance.service.news')->getLatestNews();
+        }
+
+        $view = $this->view($news, 200);
+
+        return $this->handleView($view);
+    }
+
+    public function getNewAction($id)
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+
+        $repository = $entityManager->getRepository('AppBundle:News');
+        $news = $repository->find($id);
+
+        if (!$news) {
+            throw $this->createNotFoundException('No news found');
         }
 
         $view = $this->view($news, 200);
@@ -44,19 +55,8 @@ class NewsController extends FOSRestController
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $title = $request->request->get('title');
-        $slug = $request->request->get('slug');
-
-        $number = random_int(1, 100);
-
-        $news = new News();
-        $news->setTitle($title . ' ' . $number);
-        $news->setSlug($slug . ' ' . $number);
-        $news->setMarkup('To bedzie nasz news z API dodadny...');
-        $news->setIdAuthor(140);
-
-        $entityManager->persist($news);
-        $entityManager->flush();
+        $newsCreator = new NewsCreator($entityManager);
+        $news = $newsCreator->create($request);
 
         $view = $this->view($news, 201);
 
@@ -67,34 +67,27 @@ class NewsController extends FOSRestController
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $title = $request->request->get('title');
-        $slug = $request->request->get('slug');
+        $repository = $entityManager->getRepository('AppBundle:News');
+        $news = $repository->find($id);
 
-        $number = random_int(1, 100);
+        if (!$news) {
+            throw $this->createNotFoundException('No news found');
+        }
 
-        $news = new News();
-        $news->setTitle($title . ' ' . $number);
-        $news->setSlug($slug . ' ' . $number);
-        $news->setMarkup('To bedzie nasz news z API dodadny...');
-        $news->setIdAuthor(140);
+        $newsCreator = new NewsCreator($entityManager);
+        $news = $newsCreator->edit($request, $id);
 
-        $entityManager->persist($news);
-        $entityManager->flush();
-
-        $view = $this->view($news, 201);
+        $view = $this->view($news, 200);
+//        $view = $this->view([], 204);
 
         return $this->handleView($view);
     }
 
-    /**
-     * @Route("/news/{id}")
-     * @Method("DELETE")
-     */
     public function deleteAction($id)
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $repository = $entityManager->getRepository(News::class);
+        $repository = $entityManager->getRepository('AppBundle:News');
         $news = $repository->find($id);
 
         if (!$news) {
@@ -103,17 +96,9 @@ class NewsController extends FOSRestController
 
         $entityManager->remove($news);
         $entityManager->flush();
-        
-        // create a JSON-response with a 200 status code
-        // $response = new Response(json_encode($news));
-        // $response->headers->set('Content-Type', 'application/json');
 
-        // return $response;
+        $view = $this->view([], 204);
 
-        return new Response(
-            json_encode(null),
-            204,
-            ['Content-Type' => 'application/json']
-        );
+        return $this->handleView($view);
     }
 }

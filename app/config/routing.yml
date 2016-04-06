@@ -7,16 +7,20 @@ app:
     type:     annotation
 #    prefix:   /api/v1
 
+#go_integro_hateoas:
+#    resource: "@GoIntegroHateoasBundle/Resources/config/routing.yml"
+#    prefix: /api/v1
+
 #sraapi:
 ##    resource: "@AppBundle/Controller/ApiController"
 #    resource: AppBundle\Controller\ApiController
 #    type:     rest
 #    prefix:   /api/v1
 
-#news:
-#    resource: AppBundle\Controller\NewsController
-#    type:     rest
-#    prefix:   /api/v1
+news:
+    resource: AppBundle\Controller\NewsController
+    type:     rest
+    prefix:   /api/v1
 
 articles:
     resource: AppBundle\Controller\ArticleController
