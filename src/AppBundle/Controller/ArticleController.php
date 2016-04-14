@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use Core\Service\ArticleChanger;
 use Core\Service\ArticleProvider;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,40 +37,34 @@ class ArticleController extends FOSRestController
 
     public function getArticleAction($id)
     {
-        $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Article');
+        $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $article = $repository->find($id);
+        $articleChanger = new ArticleChanger($entityManager);
+        $article = $articleChanger->find($id);
 
         $view = $this->view($article, 200);
 
         return $this->handleView($view);
     }
 
-    public function putArticleAction($id)
+    public function postArticlesAction(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getEntityManager();
-//        $repository = $entityManager->getRepository('AppBundle:ArticleCategory');
-        $repository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Article');
+        $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $article = $repository->find($id);
+        $articleChanger = new ArticleChanger($entityManager);
+        $article = $articleChanger->create($request);
 
-        // id_article_category, id_article_template, id_author, title, slug, old_url, markup, markdown, creation_date,
-        // modification_date, rated, sum, views, idx, verified, visible, deleted
-//        $article->setCategory($categoryEntity);
-//        $article->setIdArticleTemplate(null);
-//        $article->setIdAuthor(140);
-        $article->setTitle($title . ' po zmianie' . ' ' . $number);
-        $article->setSlug($slug . '-po-zmienie-' . ' ' . $number);
-        $article->setMarkup('ot bedzie długi tekst o pisaniu api po zmianie...');
-//        $article->setCreationDate(new \DateTime());
-        $article->setModificationDate(new \DateTime());
-//        $article->setRated();
-//        $article->getSum();
+        $view = $this->view($article, 201);
 
+        return $this->handleView($view);
+    }
 
-        $entityManager->persist($article);
-        $entityManager->flush();
+    public function putArticleAction(Request $request, $id)
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
 
+        $articleChanger = new ArticleChanger($entityManager);
+        $article = $articleChanger->edit($request, $id);
 
         $view = $this->view($article, 200);
 
@@ -78,17 +73,10 @@ class ArticleController extends FOSRestController
 
     public function deleteArticleAction($id)
     {
-        $entityManager = $this->getDoctrine()->getEntityManager();
-        $repository = $entityManager->getRepository('AppBundle:Article');
+        $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $article = $repository->find($id);
-
-        if (is_null($article)) {
-            throw $this->createNotFoundException('404 Not Found');
-        }
-
-        $entityManager->remove($article);
-        $entityManager->flush();
+        $articleChanger = new ArticleChanger($entityManager);
+        $articleChanger->delete($id);
 
         $view = $this->view([], 204);
 

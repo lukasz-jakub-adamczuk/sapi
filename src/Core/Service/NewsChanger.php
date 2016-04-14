@@ -4,11 +4,14 @@ namespace Core\Service;
 
 use AppBundle\Entity\News;
 use Core\Helpers\Utilities;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
-class NewsCreator
+class NewsChanger
 {
-    public function __construct($entityManager)
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -17,19 +20,12 @@ class NewsCreator
     {
         $fields = $this->prepare($request);
 
-//        $title = $request->request->get('title');
-//        $slug = $request->request->get('slug', Utilities::slugify($title));
-//        $markup = $request->request->get('markup');
-//        $markdown = $request->request->get('markdown');
-
         $news = new News();
-//        $news->setTitle($title);
-//        $news->setSlug($slug);
-//        $news->setMarkup($markup);
-//        $news->setMarkdown($markdown);
-//        $news->setIdAuthor(140);
-////        $news->set
-//        $news->setCreationDate(new \DateTime());
+
+        // setCreationDate if not set
+        if (!isset($fields['creation_date'])) {
+            $news->setCreationDate(new \DateTime());
+        }
 
         $news = $this->set($news, $fields);
 
@@ -43,24 +39,14 @@ class NewsCreator
     {
         $fields = $this->prepare($request);
 
-//        $title = $request->request->get('title');
-//        $slug = $request->request->get('slug', Utilities::slugify($title));
-//        $markup = $request->request->get('markup');
-//        $markdown = $request->request->get('markdown');
-
         $news = $this->find($id);
 
+        // setModificationDate if not set
+        if (!isset($fields['modification_date'])) {
+            $news->setModificationDate(new \DateTime());
+        }
+
         $news = $this->set($news, $fields);
-
-//        foreach ($fields as $method => $arg) {
-//            $news->$method($arg);
-//        }
-
-//        $news->setTitle($title);
-//        $news->setSlug($slug);
-//        $news->setMarkup($markup);
-//        $news->setMarkdown($markdown);
-//        $news->setModificationDate(new \DateTime());
 
         $this->entityManager->persist($news);
         $this->entityManager->flush();
@@ -106,6 +92,7 @@ class NewsCreator
 
     public function set($news, $fields)
     {
+        // if creation
         foreach ($fields as $method => $arg) {
             $news->$method($arg);
         }

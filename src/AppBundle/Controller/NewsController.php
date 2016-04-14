@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\News;
-use Core\Service\NewsCreator;
+use Core\Service\NewsChanger;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Core\Helpers\Utilities;
@@ -55,8 +55,8 @@ class NewsController extends FOSRestController
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $newsCreator = new NewsCreator($entityManager);
-        $news = $newsCreator->create($request);
+        $newsChanger = new NewsChanger($entityManager);
+        $news = $newsChanger->create($request);
 
         $view = $this->view($news, 201);
 
@@ -74,8 +74,8 @@ class NewsController extends FOSRestController
             throw $this->createNotFoundException('No news found');
         }
 
-        $newsCreator = new NewsCreator($entityManager);
-        $news = $newsCreator->edit($request, $id);
+        $newsChanger = new NewsChanger($entityManager);
+        $news = $newsChanger->edit($request, $id);
 
         $view = $this->view($news, 200);
 //        $view = $this->view([], 204);
@@ -83,7 +83,7 @@ class NewsController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function deleteAction($id)
+    public function deleteNewsAction($id)
     {
         $entityManager = $this->get('doctrine.orm.entity_manager');
 
