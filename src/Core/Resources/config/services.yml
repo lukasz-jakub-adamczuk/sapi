@@ -8,3 +8,8 @@ services:
     core.service.article:
         class: Core\Service\ArticleProvider
         arguments: ["@doctrine.orm.entity_manager"]
+    core.repository.news:
+        class: Doctrine\ORM\EntityManager
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\News

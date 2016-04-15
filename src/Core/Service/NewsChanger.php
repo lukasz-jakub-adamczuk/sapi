@@ -4,21 +4,26 @@ namespace Core\Service;
 
 use AppBundle\Entity\News;
 use Core\Helpers\Utilities;
+use Core\Repository\NewsRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class NewsChanger
 {
-    private $entityManager;
+    use HydrationTrait;
+    /**
+     * @var NewsRepository
+     */
+    private $newsRepository;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(NewsRepository $newsRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->newsRepository = $newsRepository;
     }
 
     public function create(Request $request)
     {
-        $fields = $this->prepare($request);
+        $fields = $this->getHydrationMap($request);
 
         $news = new News();
 
@@ -27,17 +32,16 @@ class NewsChanger
             $news->setCreationDate(new \DateTime());
         }
 
-        $news = $this->set($news, $fields);
+        $news = $this->hydrate($news, $fields);
 
-        $this->entityManager->persist($news);
-        $this->entityManager->flush();
+        $this->newsRepository->save($news);
 
         return $news;
     }
 
     public function edit(Request $request, $id)
     {
-        $fields = $this->prepare($request);
+        $fields = $this->getHydrationMap($request);
 
         $news = $this->find($id);
 
@@ -46,10 +50,9 @@ class NewsChanger
             $news->setModificationDate(new \DateTime());
         }
 
-        $news = $this->set($news, $fields);
+        $news = $this->hydrate($news, $fields);
 
-        $this->entityManager->persist($news);
-        $this->entityManager->flush();
+        $this->newsRepository->save($news);
 
         return $news;
     }
@@ -58,13 +61,14 @@ class NewsChanger
     {
         $news = $this->find($id);
 
+//        $this->newsRepository->delete($news);
+
         return $news;
     }
 
     private function find($id)
     {
-        $repository = $this->entityManager->getRepository('AppBundle:News');
-        $news = $repository->find($id);
+        $news = $this-$this->newsRepository->find($id);
 
         if (!$news) {
             throw $this->createNotFoundException('No news found');
@@ -73,30 +77,14 @@ class NewsChanger
         return $news;
     }
 
-    private function prepare(Request $request)
+    private function getHydrationMap(Request $request)
     {
-        $fields = [];
-
-        foreach ($request->request->all() as $key => $value) {
-            // toCamelCase
-            $name = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-            $fields['set' . $name] = $value;
-        }
+        $fields = $this->prepareHydrationMap($request);
 
         if (!isset($fields['setSlug'])) {
             $fields['setSlug'] = Utilities::slugify($fields['setTitle']);
         }
 
         return $fields;
-    }
-
-    public function set($news, $fields)
-    {
-        // if creation
-        foreach ($fields as $method => $arg) {
-            $news->$method($arg);
-        }
-
-        return $news;
     }
 }

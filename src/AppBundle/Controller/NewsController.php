@@ -53,9 +53,11 @@ class NewsController extends FOSRestController
 
     public function postNewsAction(Request $request)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+//        $entityManager = $this->get('doctrine.orm.entity_manager');
 
-        $newsChanger = new NewsChanger($entityManager);
+        $newsRepository = $this->get('core.repository.news');
+
+        $newsChanger = new NewsChanger($newsRepository);
         $news = $newsChanger->create($request);
 
         $view = $this->view($news, 201);
