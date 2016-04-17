@@ -5,10 +5,9 @@ namespace Core\Service;
 use AppBundle\Entity\News;
 use Core\Helpers\Utilities;
 use Core\Repository\NewsRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
-class NewsChanger
+class NewsManager
 {
     use HydrationTrait;
     /**
@@ -19,6 +18,17 @@ class NewsChanger
     public function __construct(NewsRepository $newsRepository)
     {
         $this->newsRepository = $newsRepository;
+    }
+
+    public function find($id)
+    {
+        $news = $this->newsRepository->find($id);
+
+        if (!$news) {
+            throw $this->createNotFoundException('No news found');
+        }
+
+        return $news;
     }
 
     public function create(Request $request)
@@ -61,18 +71,7 @@ class NewsChanger
     {
         $news = $this->find($id);
 
-//        $this->newsRepository->delete($news);
-
-        return $news;
-    }
-
-    private function find($id)
-    {
-        $news = $this-$this->newsRepository->find($id);
-
-        if (!$news) {
-            throw $this->createNotFoundException('No news found');
-        }
+        $this->newsRepository->delete($news);
 
         return $news;
     }

@@ -3,10 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\News;
-use Core\Service\NewsChanger;
+use Core\Service\NewsManager;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
-use Core\Helpers\Utilities;
 
 class NewsController extends FOSRestController
 {
@@ -53,12 +52,10 @@ class NewsController extends FOSRestController
 
     public function postNewsAction(Request $request)
     {
-//        $entityManager = $this->get('doctrine.orm.entity_manager');
-
         $newsRepository = $this->get('core.repository.news');
 
-        $newsChanger = new NewsChanger($newsRepository);
-        $news = $newsChanger->create($request);
+        $newsManager = new NewsManager($newsRepository);
+        $news = $newsManager->create($request);
 
         $view = $this->view($news, 201);
 
@@ -67,17 +64,10 @@ class NewsController extends FOSRestController
 
     public function putNewsAction(Request $request, $id)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $newsRepository = $this->get('core.repository.news');
 
-        $repository = $entityManager->getRepository('AppBundle:News');
-        $news = $repository->find($id);
-
-        if (!$news) {
-            throw $this->createNotFoundException('No news found');
-        }
-
-        $newsChanger = new NewsChanger($entityManager);
-        $news = $newsChanger->edit($request, $id);
+        $newsManager = new NewsManager($newsRepository);
+        $news = $newsManager->edit($request, $id);
 
         $view = $this->view($news, 200);
 //        $view = $this->view([], 204);
@@ -87,17 +77,10 @@ class NewsController extends FOSRestController
 
     public function deleteNewsAction($id)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $newsRepository = $this->get('core.repository.news');
 
-        $repository = $entityManager->getRepository('AppBundle:News');
-        $news = $repository->find($id);
-
-        if (!$news) {
-            throw $this->createNotFoundException('No news found');
-        }
-
-        $entityManager->remove($news);
-        $entityManager->flush();
+        $newsManager = new NewsManager($newsRepository);
+        $newsManager->delete($id);
 
         $view = $this->view([], 204);
 
