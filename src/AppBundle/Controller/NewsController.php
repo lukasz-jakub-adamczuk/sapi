@@ -26,7 +26,7 @@ class NewsController extends FOSRestController
         } elseif ($mode == 'archive') {
             $news = $this->get('renaissance.service.news')->getArchive();
         } else {
-            $news = $this->get('renaissance.service.news')->getLatestNews();
+            $news = $this->get('renaissance.service.news')->getLatestsNews();
         }
 
         $view = $this->view($news, 200);

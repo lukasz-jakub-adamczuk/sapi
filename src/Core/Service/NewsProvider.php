@@ -8,12 +8,15 @@ class NewsProvider
 {
     private $entityManager;
 
+    private $queryBuilder;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        //$this->queryBuilder = $this->entityManager->createQueryBuilder();
     }
 
-    public function getLatestNews()
+    public function getLatestsNews()
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
@@ -57,9 +60,12 @@ class NewsProvider
             ->groupBy('month')
             ->setParameter(':year', $year);
 
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $news = $query->getArrayResult();
 
-        return $news;
+            return $news;
+        }
     }
 
     public function getArchiveByYearAndMonth($year, $month)
@@ -73,9 +79,12 @@ class NewsProvider
             ->setParameter(':year', $year)
             ->setParameter(':month', $month);
 
-        $news = $queryBuilder->getQuery()->getArrayResult();
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $news = $query->getArrayResult();
 
-        return $news;
+            return $news;
+        }
     }
 
     public function getNews($year, $month, $day, $title)
@@ -90,8 +99,11 @@ class NewsProvider
             ->setParameter(':date', $date)
             ->setParameter(':slug', $title);
 
-        $news = $queryBuilder->getQuery()->getSingleResult();
+        $query = $queryBuilder->getQuery();
+        if ($query) {
+            $news = $query->getSingleResult();
 
-        return $news;
+            return $news;
+        }
     }
 }

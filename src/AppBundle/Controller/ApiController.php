@@ -191,11 +191,6 @@ class ApiController extends FOSRestController
 
         $article = new Article();
 
-        //id_article_category, id_article_template, id_author, title, slug, old_url, markup, markdown, creation_date,
-        // modification_date, rated, sum, views, idx, verified, visible, deleted) VALUES
-        // (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' with params
-        // [null, null, 2, \"Test artykulu 17\", \"test-artykulu-17\", null, \"To bedzie d\\u0142ugi artykul...\", null, null, null, \"0\", \"0\", \"0\", \"0\", \"0\", \"1\", \"0\"]:\n\nSQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_article_category' cannot be null",
-        //$article->setIdArticleCategory(86);
         $article->setCategory($categoryEntity);
 
 //        $article->setIdArticleTemplate(null);

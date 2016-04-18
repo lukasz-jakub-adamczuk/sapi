@@ -8,7 +8,6 @@
 
 namespace Core\Repository;
 
-
 use AppBundle\Entity\News;
 use Doctrine\ORM\EntityRepository;
 
