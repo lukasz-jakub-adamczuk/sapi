@@ -49,10 +49,11 @@ class ArticleController extends FOSRestController
 
     public function postArticlesAction(Request $request)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
-
-        $articleChanger = new ArticleChanger($entityManager);
-        $article = $articleChanger->create($request);
+//        $entityManager = $this->get('doctrine.orm.entity_manager');
+//
+//        $articleChanger = new ArticleChanger($entityManager);
+//        $article = $articleChanger->create($request);
+        $article = $this->get('core.manager.article')->create($request);
 
         $view = $this->view($article, 201);
 

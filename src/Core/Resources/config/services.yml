@@ -14,8 +14,15 @@ services:
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\News
+    core.repository.article:
+            class: Doctrine\ORM\EntityManager
+            factory: ["@doctrine", getRepository]
+            arguments:
+                - AppBundle\Entity\Article
 
     core.manager.news:
         class: Core\Service\NewsManager
         arguments: ["@core.repository.news"]
-
+    core.manager.article:
+        class: Core\Service\ArticleManager
+        arguments: ["@core.repository.article"]

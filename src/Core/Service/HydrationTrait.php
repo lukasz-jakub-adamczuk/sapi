@@ -19,15 +19,15 @@ trait HydrationTrait
         return $fields;
     }
 
-    public function hydrate($news, $fields)
+    public function hydrate($entity, $fields)
     {
-        // if creation
+        // check all fields for entity
         foreach ($fields as $method => $arg) {
-            if (method_exists($news, $method)) {
-                $news->$method($arg);
+            if (method_exists($entity, $method)) {
+                $entity->$method($arg);
             }
         }
 
-        return $news;
+        return $entity;
     }
 }

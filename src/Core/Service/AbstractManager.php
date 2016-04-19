@@ -9,6 +9,7 @@
 namespace Core\Service;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractManager
 {
@@ -30,24 +31,6 @@ abstract class AbstractManager
         if (!$entity) {
             throw $this->createNotFoundException('No news found');
         }
-
-        return $entity;
-    }
-
-    public function create(Request $request)
-    {
-        $fields = $this->getHydrationMap($request);
-
-        $entity = new Article();
-
-        // setCreationDate if not set
-        if (!isset($fields['creation_date'])) {
-            $entity->setCreationDate(new \DateTime());
-        }
-
-        $entity = $this->hydrate($entity, $fields);
-
-        $this->entityRepository->save($entity);
 
         return $entity;
     }
@@ -81,6 +64,6 @@ abstract class AbstractManager
 
     protected function getHydrationMap(Request $request)
     {
-        return $fields;
+        // ready to override
     }
 }

@@ -36,14 +36,15 @@ class NewsController extends FOSRestController
 
     public function getNewAction($id)
     {
-        $entityManager = $this->get('doctrine.orm.entity_manager');
-
-        $repository = $entityManager->getRepository('AppBundle:News');
-        $news = $repository->find($id);
-
-        if (!$news) {
-            throw $this->createNotFoundException('No news found');
-        }
+//        $entityManager = $this->get('doctrine.orm.entity_manager');
+//
+//        $repository = $entityManager->getRepository('AppBundle:News');
+//        $news = $repository->find($id);
+//
+//        if (!$news) {
+//            throw $this->createNotFoundException('No news found');
+//        }
+        $news = $this->get('core.manager.news')->find($id);
 
         $view = $this->view($news, 200);
 
@@ -52,10 +53,10 @@ class NewsController extends FOSRestController
 
     public function postNewsAction(Request $request)
     {
-        $newsRepository = $this->get('core.repository.news');
-
-        $newsManager = new NewsManager($newsRepository);
-        $news = $newsManager->create($request);
+//        $newsRepository = $this->get('core.repository.news');
+//
+//        $newsManager = new NewsManager($newsRepository);
+        $news = $this->get('core.manager.news')->create($request);
 
         $view = $this->view($news, 201);
 
@@ -82,10 +83,10 @@ class NewsController extends FOSRestController
 
     public function deleteNewsAction($id)
     {
-        $newsRepository = $this->get('core.repository.news');
-
-        $newsManager = new NewsManager($newsRepository);
-        $newsManager->delete($id);
+//        $newsRepository = $this->get('core.repository.news');
+//
+//        $newsManager = new NewsManager($newsRepository);
+        $this->get('core.manager.news')->delete($id);
 
         $view = $this->view([], 204);
 
