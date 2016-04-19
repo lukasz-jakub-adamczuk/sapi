@@ -2,108 +2,65 @@
 
 namespace Core\Service;
 
+use Core\Repository\NewsRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 class NewsProvider
 {
-    private $entityManager;
 
-    private $queryBuilder;
-
-    public function __construct(EntityManager $entityManager)
+    public function __construct(NewsRepository $newsRepository)
     {
-        $this->entityManager = $entityManager;
-        //$this->queryBuilder = $this->entityManager->createQueryBuilder();
+        $this->entityRepository = $newsRepository;
     }
 
     public function getLatestsNews()
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $news = $this->entityRepository->getLatestsNews();
 
-        $queryBuilder->select('n')
-            ->from('AppBundle:News', 'n')
-            ->orderBy('n.creationDate', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(20);
-
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $news = $query->getArrayResult();
-
+        if ($news) {
             return $news;
         }
+        return [];
     }
 
     public function getArchive()
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $news = $this->entityRepository->getArchive();
 
-        $queryBuilder->select('COUNT(n.idNews) items, YEAR(n.creationDate) year')
-            ->from('AppBundle:News', 'n')
-            ->groupBy('year');
-
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $news = $query->getArrayResult();
-
+        if ($news) {
             return $news;
         }
+        return [];
     }
 
     public function getArchiveByYear($year)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $news = $this->entityRepository->getArchiveByYear($year);
 
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
-            ->from('AppBundle:News', 'n')
-            ->where('YEAR(n.creationDate)=:year')
-            ->groupBy('month')
-            ->setParameter(':year', $year);
-
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $news = $query->getArrayResult();
-
+        if ($news) {
             return $news;
         }
+        return [];
     }
 
     public function getArchiveByYearAndMonth($year, $month)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $news = $this->entityRepository->getArchiveByYearAndMonth($year, $month);
 
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')
-            ->from('AppBundle:News', 'n')
-            ->where('YEAR(n.creationDate)=:year', 'MONTH(n.creationDate)=:month')
-            ->groupBy('n.idNews')
-            ->setParameter(':year', $year)
-            ->setParameter(':month', $month);
-
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $news = $query->getArrayResult();
-
+        if ($news) {
             return $news;
         }
+        return [];
     }
 
     public function getNews($year, $month, $day, $title)
     {
-        $date = implode('-', [$year, $month, $day]);
+        $news = $this->entityRepository->getArchiveByYearAndMonth($year, $month, $day, $title);
 
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        $queryBuilder->select('n')
-            ->from('AppBundle:News', 'n')
-            ->where('DATE(n.creationDate)=:date', 'n.slug=:slug')
-            ->setParameter(':date', $date)
-            ->setParameter(':slug', $title);
-
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $news = $query->getSingleResult();
-
+        if ($news) {
             return $news;
         }
+        return null;
     }
 }

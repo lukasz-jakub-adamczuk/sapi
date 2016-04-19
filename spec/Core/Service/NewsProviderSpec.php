@@ -3,7 +3,9 @@
 namespace spec\Core\Service;
 
 use AppBundle\Entity\News;
+use Core\Repository\NewsRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -15,83 +17,90 @@ class NewsProviderSpec extends ObjectBehavior
         $this->shouldHaveType('Core\Service\NewsProvider');
     }
 
-    function let(EntityManager $entityManager)
+    function let(NewsRepository $newsRepository)
     {
-        $this->beConstructedWith($entityManager);
+        $this->beConstructedWith($newsRepository);
     }
 
-    function it_returns_latests_news(EntityManager $entityManager, QueryBuilder $queryBuilder)
+    function it_returns_latests_news(NewsRepository $newsRepository)
     {
-        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
-
-        $queryBuilder->select('n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->orderBy('n.creationDate', 'DESC')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setFirstResult(0)->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setMaxResults(20)->shouldBeCalled()->willReturn($queryBuilder);
-
-        $queryBuilder->getQuery()->shouldBeCalled();
+        $newsRepository->getLatestsNews()->shouldBeCalled();
 
         $this->getLatestsNews();
     }
 
-    function it_returns_news_archive(EntityManager $entityManager, QueryBuilder $queryBuilder)
+    function it_returns_news_archive(NewsRepository $newsRepository)
     {
-        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
-
-        $queryBuilder->select('COUNT(n.idNews) items, YEAR(n.creationDate) year')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->groupBy('year')->shouldBeCalled()->willReturn($queryBuilder);
-
-        $queryBuilder->getQuery()->shouldBeCalled();
+        $newsRepository->getArchive()->shouldBeCalled();
+//        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+//
+//        $queryBuilder->select('COUNT(n.idNews) items, YEAR(n.creationDate) year')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->groupBy('year')->shouldBeCalled()->willReturn($queryBuilder);
+//
+//        $queryBuilder->getQuery()->shouldBeCalled();
 
         $this->getArchive();
     }
 
-    function it_returns_news_archive_by_year($year, EntityManager $entityManager, QueryBuilder $queryBuilder)
+    function it_returns_news_archive_by_year(NewsRepository $newsRepository)
     {
-        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+        $year = '2016';
 
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->where('YEAR(n.creationDate)=:year')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->groupBy('month')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setParameter(':year', $year)->shouldBeCalled()->willReturn($queryBuilder);
-
-        $queryBuilder->getQuery()->shouldBeCalled();
+        $newsRepository->getArchiveByYear($year)->shouldBeCalled();
+//        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+//
+//        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->where('YEAR(n.creationDate)=:year')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->groupBy('month')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->setParameter(':year', $year)->shouldBeCalled()->willReturn($queryBuilder);
+//
+//        $queryBuilder->getQuery()->shouldBeCalled();
 
         $this->getArchiveByYear($year);
     }
 
-    function it_returns_news_archive_by_year_and_month($year, $month, EntityManager $entityManager, QueryBuilder $queryBuilder)
+    function it_returns_news_archive_by_year_and_month(NewsRepository $newsRepository)
     {
-        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+        $year = '2016';
+        $month = '01';
 
-        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->where('YEAR(n.creationDate)=:year', 'MONTH(n.creationDate)=:month')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->groupBy('n.idNews')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setParameter(':year', $year)->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setParameter(':month', $month)->shouldBeCalled()->willReturn($queryBuilder);
-
-        $queryBuilder->getQuery()->shouldBeCalled();
+        $newsRepository->getArchiveByYearAndMonth($year, $month)->shouldBeCalled();
+//        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+//
+//        $queryBuilder->select('n, COUNT(n.idNews) items, YEAR(n.creationDate) year, MONTH(n.creationDate) month')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->where('YEAR(n.creationDate)=:year', 'MONTH(n.creationDate)=:month')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->groupBy('n.idNews')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->setParameter(':year', $year)->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->setParameter(':month', $month)->shouldBeCalled()->willReturn($queryBuilder);
+//
+//        $queryBuilder->getQuery()->shouldBeCalled();
 
         $this->getArchiveByYearAndMonth($year, $month);
     }
 
-    function it_returns_news($year, $month, $day, $title, EntityManager $entityManager, QueryBuilder $queryBuilder)
+    function it_returns_news(NewsRepository $newsRepository)
     {
+        $year = '2016';
+        $month = '01';
+        $day = '01';
+        $title = 'taki sobie bedzie';
+
 //        $date = implode('-', [$year, $month, $day]);
 
-        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+        $newsRepository->getArchiveByYearAndMonth($year, $month, $month, $title)->shouldBeCalled();
 
-        $queryBuilder->select('n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->where('DATE(n.creationDate)=:date', 'n.slug=:slug')->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setParameter(':date', $date)->shouldBeCalled()->willReturn($queryBuilder);
-        $queryBuilder->setParameter(':slug', $title)->shouldBeCalled()->willReturn($queryBuilder);
-
-        $queryBuilder->getQuery()->shouldBeCalled();
+//        $entityManager->createQueryBuilder()->willReturn($queryBuilder);
+//
+//        $queryBuilder->select('n')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->from('AppBundle:News', 'n')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->where('DATE(n.creationDate)=:date', 'n.slug=:slug')->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->setParameter(':date', $date)->shouldBeCalled()->willReturn($queryBuilder);
+//        $queryBuilder->setParameter(':slug', $title)->shouldBeCalled()->willReturn($queryBuilder);
+//
+//        $queryBuilder->getQuery()->shouldBeCalled();
 
         $this->getNews($year, $month, $day, $title);
 

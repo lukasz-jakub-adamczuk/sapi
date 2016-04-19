@@ -4,12 +4,18 @@ services:
 #        arguments: ["@service_id", "plain_value", %parameter%]
     core.service.news:
         class: Core\Service\NewsProvider
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@core.repository.news"]
     core.service.article:
         class: Core\Service\ArticleProvider
         arguments: ["@doctrine.orm.entity_manager"]
+
     core.repository.news:
         class: Doctrine\ORM\EntityManager
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\News
+
+    core.manager.news:
+        class: Core\Service\NewsManager
+        arguments: ["@core.repository.news"]
+

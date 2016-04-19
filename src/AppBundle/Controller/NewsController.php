@@ -18,15 +18,15 @@ class NewsController extends FOSRestController
         $slug   = $request->get('slug');
 
         if ($year && $month && $day && $slug) {
-            $news = $this->get('renaissance.service.news')->getNews($year, $month, $day, $slug);
+            $news = $this->get('core.service.news')->getNews($year, $month, $day, $slug);
         } elseif ($year && $month) {
-            $news = $this->get('renaissance.service.news')->getArchiveByYearAndMonth($year, $month);
+            $news = $this->get('core.service.news')->getArchiveByYearAndMonth($year, $month);
         } elseif ($year) {
-            $news = $this->get('renaissance.service.news')->getArchiveByYear($year);
+            $news = $this->get('core.service.news')->getArchiveByYear($year);
         } elseif ($mode == 'archive') {
-            $news = $this->get('renaissance.service.news')->getArchive();
+            $news = $this->get('core.service.news')->getArchive();
         } else {
-            $news = $this->get('renaissance.service.news')->getLatestsNews();
+            $news = $this->get('core.service.news')->getLatestsNews();
         }
 
         $view = $this->view($news, 200);
@@ -64,10 +64,15 @@ class NewsController extends FOSRestController
 
     public function putNewsAction(Request $request, $id)
     {
-        $newsRepository = $this->get('core.repository.news');
+//        $newsRepository = $this->get('core.repository.news');
 
-        $newsManager = new NewsManager($newsRepository);
-        $news = $newsManager->edit($request, $id);
+//        $newsManager = new NewsManager($newsRepository);
+
+        //$newsMangger = $this->get('core.manager.news');
+
+        //$news = $newsManager->edit($request, $id);
+        $news = $this->get('core.manager.news')->edit($request, $id);
+
 
         $view = $this->view($news, 200);
 //        $view = $this->view([], 204);

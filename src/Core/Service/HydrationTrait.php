@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 trait HydrationTrait
 {
-    private function prepareHydrationMap(Request $request)
+    protected function prepareHydrationMap(Request $request)
     {
         $fields = [];
 
@@ -23,7 +23,9 @@ trait HydrationTrait
     {
         // if creation
         foreach ($fields as $method => $arg) {
-            $news->$method($arg);
+            if (method_exists($news, $method)) {
+                $news->$method($arg);
+            }
         }
 
         return $news;
