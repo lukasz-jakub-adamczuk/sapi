@@ -1,0 +1,9 @@
+AppBundle\Entity\User:
+    exclusion_policy: ALL
+    properties:
+        idUser:
+            expose: true
+        name:
+            expose: true
+        slug:
+            expose: true

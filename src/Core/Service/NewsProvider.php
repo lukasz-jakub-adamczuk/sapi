@@ -3,8 +3,6 @@
 namespace Core\Service;
 
 use Core\Repository\NewsRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 
 class NewsProvider
 {

@@ -1,0 +1,20 @@
+default:
+    suites:
+        default:
+            type: symfony_bundle
+            bundle: AppBundle
+            filters:
+                tags: ~@wip
+            contexts:
+                - AppBundle\FeatureContext
+#                - AppBundle\FeatureContext
+                - Behat\MinkExtension\Context\MinkContext
+    extensions:
+        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+        Codifico\ParameterBagExtension\ServiceContainer\ParameterBagExtension:
+            parameter_bag:
+                class: Codifico\ParameterBagExtension\Bag\InMemoryPlaceholderBag

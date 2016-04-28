@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\News;
-use Core\Service\NewsManager;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,15 +16,15 @@ class NewsController extends FOSRestController
         $slug   = $request->get('slug');
 
         if ($year && $month && $day && $slug) {
-            $news = $this->get('core.service.news')->getNews($year, $month, $day, $slug);
+            $news = $this->get('core.provider.news')->getNews($year, $month, $day, $slug);
         } elseif ($year && $month) {
-            $news = $this->get('core.service.news')->getArchiveByYearAndMonth($year, $month);
+            $news = $this->get('core.provider.news')->getArchiveByYearAndMonth($year, $month);
         } elseif ($year) {
-            $news = $this->get('core.service.news')->getArchiveByYear($year);
+            $news = $this->get('core.provider.news')->getArchiveByYear($year);
         } elseif ($mode == 'archive') {
-            $news = $this->get('core.service.news')->getArchive();
+            $news = $this->get('core.provider.news')->getArchive();
         } else {
-            $news = $this->get('core.service.news')->getLatestsNews();
+            $news = $this->get('core.provider.news')->getLatestsNews();
         }
 
         $view = $this->view($news, 200);
@@ -36,14 +34,6 @@ class NewsController extends FOSRestController
 
     public function getNewAction($id)
     {
-//        $entityManager = $this->get('doctrine.orm.entity_manager');
-//
-//        $repository = $entityManager->getRepository('AppBundle:News');
-//        $news = $repository->find($id);
-//
-//        if (!$news) {
-//            throw $this->createNotFoundException('No news found');
-//        }
         $news = $this->get('core.manager.news')->find($id);
 
         $view = $this->view($news, 200);
@@ -53,9 +43,6 @@ class NewsController extends FOSRestController
 
     public function postNewsAction(Request $request)
     {
-//        $newsRepository = $this->get('core.repository.news');
-//
-//        $newsManager = new NewsManager($newsRepository);
         $news = $this->get('core.manager.news')->create($request);
 
         $view = $this->view($news, 201);
@@ -65,27 +52,15 @@ class NewsController extends FOSRestController
 
     public function putNewsAction(Request $request, $id)
     {
-//        $newsRepository = $this->get('core.repository.news');
-
-//        $newsManager = new NewsManager($newsRepository);
-
-        //$newsMangger = $this->get('core.manager.news');
-
-        //$news = $newsManager->edit($request, $id);
         $news = $this->get('core.manager.news')->edit($request, $id);
 
-
         $view = $this->view($news, 200);
-//        $view = $this->view([], 204);
 
         return $this->handleView($view);
     }
 
     public function deleteNewsAction($id)
     {
-//        $newsRepository = $this->get('core.repository.news');
-//
-//        $newsManager = new NewsManager($newsRepository);
         $this->get('core.manager.news')->delete($id);
 
         $view = $this->view([], 204);

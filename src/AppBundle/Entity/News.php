@@ -77,6 +77,34 @@ class News
      */
     private $idNews;
 
+    /**
+     * @var string
+     */
+    protected $user;
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string user
+     *
+     * @return News
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set idAuthor

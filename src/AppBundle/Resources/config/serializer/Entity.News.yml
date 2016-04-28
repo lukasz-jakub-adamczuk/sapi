@@ -1,15 +1,13 @@
-AppBundle\Entity\Article:
+AppBundle\Entity\News:
     exclusion_policy: ALL
     properties:
-        idArticle:
+        idNews:
             expose: true
         title:
             expose: true
         slug:
             expose: true
-        category:
-            expose: true
         user:
             expose: true
-        markup:
+        modificationDate:
             expose: true

@@ -22,6 +22,11 @@ news:
     type:     rest
     prefix:   /api/v1
 
+categories:
+    resource: AppBundle\Controller\CategoryController
+    type:     rest
+    prefix:   /api/v1
+
 articles:
     resource: AppBundle\Controller\ArticleController
     type:     rest

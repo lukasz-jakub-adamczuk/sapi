@@ -2,27 +2,41 @@ services:
 #    renaissance.example:
 #        class: RenaissanceBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
-    core.service.news:
+    core.provider.news:
         class: Core\Service\NewsProvider
         arguments: ["@core.repository.news"]
-    core.service.article:
+    core.provider.article:
         class: Core\Service\ArticleProvider
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@core.repository.article"]
+    core.provider.article.category:
+            class: Core\Service\ArticleCategoryProvider
+            arguments: ["@doctrine.orm.entity_manager"]
 
+    core.repository.user:
+        class: Doctrine\ORM\EntityManager
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\User
     core.repository.news:
         class: Doctrine\ORM\EntityManager
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\News
     core.repository.article:
-            class: Doctrine\ORM\EntityManager
-            factory: ["@doctrine", getRepository]
-            arguments:
-                - AppBundle\Entity\Article
+        class: Doctrine\ORM\EntityManager
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\Article
+    core.repository.article.category:
+        class: Doctrine\ORM\EntityManager
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\ArticleCategory
 
     core.manager.news:
         class: Core\Service\NewsManager
         arguments: ["@core.repository.news"]
     core.manager.article:
         class: Core\Service\ArticleManager
-        arguments: ["@core.repository.article"]
+#        arguments: ["@core.repository.article"]
+        arguments: ["@core.repository.article", "@core.repository.article.category", "@core.repository.user"]

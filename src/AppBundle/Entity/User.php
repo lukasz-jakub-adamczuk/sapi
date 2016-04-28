@@ -72,6 +72,41 @@ class User
      */
     private $idUser;
 
+    /**
+     * @var News[]
+     */
+    protected $news;
+
+    /**
+     * @var Article[]
+     */
+    protected $articles;
+
+    public function __construct()
+    {
+        $this->news = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+    }
+
+    /**
+     * Get news list
+     *
+     * @return ArrayCollection
+     */
+    public function getNews()
+    {
+        return $this->news;
+    }
+
+    /**
+     * Get articles list
+     *
+     * @return ArrayCollection
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
 
     /**
      * Set idUserGroup

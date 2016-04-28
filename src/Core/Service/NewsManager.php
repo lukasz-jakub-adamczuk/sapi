@@ -20,7 +20,6 @@ class NewsManager extends AbstractManager
 
         $entity = new News();
 
-        // setCreationDate if not set
         if (!isset($fields['creation_date'])) {
             $entity->setCreationDate(new \DateTime());
         }

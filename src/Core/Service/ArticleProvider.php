@@ -2,6 +2,7 @@
 
 namespace Core\Service;
 
+use Core\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManager;
 //use Doctrine\ORM\EntityRepository;
 
@@ -9,38 +10,32 @@ use AppBundle\Entity\ArticleCategory;
 
 use Core\Exception\MissingParamsException;
 use Core\Exception\MissingEntityException;
+use Symfony\Component\HttpFoundation\Request;
 
 class ArticleProvider
 {
-    private $entityManager;
+    /**
+     * @var ArticleRepository
+     */
+    private $entityRepository;
 
-    private $repository;
-
-    public function __construct(EntityManager $entityManager)
+    public function __construct(ArticleRepository $articleRepository)
     {
-        $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository('AppBundle:ArticleCategory');
+        $this->entityRepository = $articleRepository;
     }
 
-    public function getArticles()
+    public function getArticles($page, $offset)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $page = $page < 1 ? 0 : $page-1;
 
-        $queryBuilder->select('a')
-            ->from('AppBundle:Article', 'a')
-            ->orderBy('a.creationDate', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(20);
+        $articles = $this->entityRepository->getArticles($page, $offset);
 
-        $query = $queryBuilder->getQuery();
-        if ($query) {
-            $articles = $query->getArrayResult();
-
+        if ($articles) {
             return $articles;
         }
         return [];
     }
-
+/*
     public function getArticlesByCategory($category)
     {
         if (empty($category)) {
@@ -79,5 +74,5 @@ class ArticleProvider
         }
 
         return $article;
-    }
+    }*/
 }

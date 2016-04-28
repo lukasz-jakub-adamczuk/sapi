@@ -2,8 +2,6 @@
 
 namespace AppBundle\Entity;
 
-// use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Article
  */
@@ -105,6 +103,11 @@ class Article
     protected $category;
 
     /**
+     * @var string
+     */
+    protected $user;
+
+    /**
      * Get category
      *
      * @return string
@@ -124,6 +127,30 @@ class Article
     public function setCategory($category)
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string user
+     *
+     * @return Article
+     */
+    public function setAuthor($user)
+    {
+        $this->user = $user;
 
         return $this;
     }

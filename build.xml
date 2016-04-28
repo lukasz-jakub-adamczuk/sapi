@@ -15,7 +15,7 @@
 
     <target name="phpmd" description="Check code using PHPMD">
         <exec executable="bin/phpmd" passthru="true" checkreturn="false">
-            <arg line="src
+            <arg line="src,features
                 xml
                 phpmd.xml
                 --suffixes php
@@ -25,7 +25,7 @@
 
     <target name="phpcpd" description="Check code using PHPCPD">
         <exec executable="bin/phpcpd" passthru="true">
-            <arg line="src spec"/>
+            <arg line="src spec features"/>
         </exec>
     </target>
 

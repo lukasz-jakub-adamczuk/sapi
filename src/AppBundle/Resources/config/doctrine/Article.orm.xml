@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="AppBundle\Entity\Article" table="article">
-    <many-to-one
-            field="category"
-            target-entity="ArticleCategory"
-            inversed-by="articles"
-            join-column="id_article_category">
-
-            <join-column name="id_article_category" referenced-column-name="id_article_category" />
-        </many-to-one>
+  <entity name="AppBundle\Entity\Article" table="article" repository-class="Core\Repository\ArticleRepository">
+    <many-to-one field="user" target-entity="User" inversed-by="articles" join-column="id_author">
+      <join-column name="id_author" referenced-column-name="id_user" />
+    </many-to-one>
+    <many-to-one field="category" target-entity="ArticleCategory" inversed-by="articles" join-column="id_article_category">
+      <join-column name="id_article_category" referenced-column-name="id_article_category" />
+    </many-to-one>
     <id name="idArticle" type="smallint" column="id_article">
       <generator strategy="IDENTITY"/>
     </id>
