@@ -11,8 +11,7 @@ class CategoryController extends FOSRestController
 {
     public function getCategoriesAction()
     {
-        $categoryRepository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
-        $categories = $categoryRepository->findAll();
+        $categories = $this->get('core.provider.category')->getCategories();
 
         $view = $this->view($categories, 200);
 
@@ -30,12 +29,7 @@ class CategoryController extends FOSRestController
 
     public function getCategoryArticlesAction($category)
     {
-//        echo $category;
-        $categoryRepository = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:ArticleCategory');
-        $categoryEntity = $categoryRepository->find(['slug' => $category]);
-//        print_r($categoryEntity);
-//        $articles = $categoryEntity->getArticles();
-        $articles = $category;
+        $articles = $this->get('core.provider.category')->getCategoryArticles($category);
 
         $view = $this->view($articles, 200);
 
@@ -44,43 +38,28 @@ class CategoryController extends FOSRestController
 
     public function postCategoryAction(Request $request)
     {
-//        $news = $this->get('core.manager.news')->create($request);
-
-        $name = $request->request->get('name');
-        $slug = Utilities::slugify($name);
-
-        $em = $this->getDoctrine()->getEntityManager();
-
-
-
-        $category = new ArticleCategory();
-        $category->setName($name);
-        $category->setSlug($slug);
-        $category->setAbbr('');
-
-        $em->persist($category);
-        $em->flush();
+        $category = $this->get('core.manager.category')->create($request);
 
         $view = $this->view($category, 201);
 
         return $this->handleView($view);
     }
 
-//    public function putNewsAction(Request $request, $id)
-//    {
-//        $news = $this->get('core.manager.news')->edit($request, $id);
-//
-//        $view = $this->view($news, 200);
-//
-//        return $this->handleView($view);
-//    }
-//
-//    public function deleteNewsAction($id)
-//    {
-//        $this->get('core.manager.news')->delete($id);
-//
-//        $view = $this->view([], 204);
-//
-//        return $this->handleView($view);
-//    }
+    public function putCategoryAction(Request $request, $id)
+    {
+        $news = $this->get('core.manager.category')->edit($request, $id);
+
+        $view = $this->view($news, 200);
+
+        return $this->handleView($view);
+    }
+
+    public function deleteCategoryAction($id)
+    {
+        $this->get('core.manager.category')->delete($id);
+
+        $view = $this->view([], 204);
+
+        return $this->handleView($view);
+    }
 }

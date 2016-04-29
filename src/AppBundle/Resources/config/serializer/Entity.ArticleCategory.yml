@@ -1,6 +1,8 @@
 AppBundle\Entity\ArticleCategory:
     exclusion_policy: ALL
     properties:
+        idArticleCategory:
+            expose: true
         name:
             expose: true
         slug:

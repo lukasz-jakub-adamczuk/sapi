@@ -5,7 +5,7 @@ namespace Core\Service;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\ArticleCategory;
 use Core\Helpers\Utilities;
-use Core\Repository\ArticleCategoryRepository;
+use Core\Repository\CategoryRepository;
 use Core\Repository\ArticleRepository;
 use Core\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ class ArticleManager extends AbstractManager
 {
 
     /**
-     * @var ArticleCategoryRepository
+     * @var CategoryRepository
      */
     private $categoryRepository;
 
@@ -23,7 +23,7 @@ class ArticleManager extends AbstractManager
      */
     private $userRepository;
 
-    public function __construct(ArticleRepository $articleRepository, ArticleCategoryRepository $categoryRepository, UserRepository $userRepository)
+    public function __construct(ArticleRepository $articleRepository, CategoryRepository $categoryRepository, UserRepository $userRepository)
     {
         parent::__construct($articleRepository);
 

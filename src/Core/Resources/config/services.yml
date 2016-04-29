@@ -8,9 +8,9 @@ services:
     core.provider.article:
         class: Core\Service\ArticleProvider
         arguments: ["@core.repository.article"]
-    core.provider.article.category:
-            class: Core\Service\ArticleCategoryProvider
-            arguments: ["@doctrine.orm.entity_manager"]
+    core.provider.category:
+        class: Core\Service\CategoryProvider
+        arguments: ["@core.repository.category"]
 
     core.repository.user:
         class: Doctrine\ORM\EntityManager
@@ -22,21 +22,23 @@ services:
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\News
+    core.repository.category:
+        class: Doctrine\ORM\EntityManager
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\ArticleCategory
     core.repository.article:
         class: Doctrine\ORM\EntityManager
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\Article
-    core.repository.article.category:
-        class: Doctrine\ORM\EntityManager
-        factory: ["@doctrine", getRepository]
-        arguments:
-            - AppBundle\Entity\ArticleCategory
 
     core.manager.news:
         class: Core\Service\NewsManager
         arguments: ["@core.repository.news"]
+    core.manager.category:
+        class: Core\Service\CategoryManager
+        arguments: ["@core.repository.category"]
     core.manager.article:
         class: Core\Service\ArticleManager
-#        arguments: ["@core.repository.article"]
-        arguments: ["@core.repository.article", "@core.repository.article.category", "@core.repository.user"]
+        arguments: ["@core.repository.article", "@core.repository.category", "@core.repository.user"]
